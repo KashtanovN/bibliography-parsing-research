@@ -17,9 +17,6 @@ spring:
       ddl-auto: validate
     properties:
       hibernate.jdbc.time_zone: UTC
-  flyway:
-    baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:false}
-    baseline-version: '0'
   jackson:
     deserialization:
       fail-on-trailing-tokens: true

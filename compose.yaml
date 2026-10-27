@@ -21,7 +21,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       POSTGRES_HOST: db
       CROSSREF_MAILTO: ${CROSSREF_MAILTO:-}
-      FLYWAY_BASELINE_ON_MIGRATE: ${FLYWAY_BASELINE_ON_MIGRATE:-false}
       # Backend has no published port. Only the internal Nginx sets X-Real-IP.
       TRUST_PROXY_HEADERS: 'true'
     depends_on:
