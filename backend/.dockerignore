@@ -1,0 +1,6 @@
+target/
+.env
+.mvn/
+mvnw
+mvnw.cmd
+src/test/

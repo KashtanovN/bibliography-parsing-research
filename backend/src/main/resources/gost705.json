@@ -1,0 +1,820 @@
+{
+  "id": "gost-7-0-5-2008",
+  "label": "ГОСТ Р 7.0.5–2008",
+  "version": "1.0.0",
+  "types": {
+    "book": {
+      "label": "Книга",
+      "fields": [
+        {
+          "name": "authors",
+          "label": "Авторы",
+          "type": "text",
+          "required": true,
+          "hint": "Иванов И. И.; Петров П. П. — разделяйте авторов точкой с запятой"
+        },
+        {
+          "name": "title",
+          "label": "Название",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "edition",
+          "label": "Сведения об издании",
+          "type": "text",
+          "required": false,
+          "hint": "Например: 2-е изд., перераб. и доп."
+        },
+        {
+          "name": "city",
+          "label": "Город издания",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "publisher",
+          "label": "Издательство",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "label": "Год",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pages",
+          "label": "Количество страниц",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "isbn",
+          "label": "ISBN",
+          "type": "text",
+          "required": false,
+          "hint": "Например: 978-5-4461-1462-6"
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "authors",
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "edition"
+          ],
+          "join": " ",
+          "prefix": "— ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "city",
+            "publisher"
+          ],
+          "join": " : ",
+          "prefix": "— ",
+          "suffix": ","
+        },
+        {
+          "fields": [
+            "year"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "pages"
+          ],
+          "join": " ",
+          "prefix": "— ",
+          "suffix": " с."
+        },
+        {
+          "fields": [
+            "isbn"
+          ],
+          "join": " ",
+          "prefix": "— ISBN ",
+          "suffix": "."
+        }
+      ]
+    },
+    "journal-article": {
+      "label": "Статья из журнала",
+      "fields": [
+        {
+          "name": "authors",
+          "label": "Авторы",
+          "type": "text",
+          "required": true,
+          "hint": "Иванов И. И.; Петров П. П. — разделяйте авторов точкой с запятой"
+        },
+        {
+          "name": "title",
+          "label": "Название статьи",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "journal",
+          "label": "Название журнала",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "label": "Год",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "volume",
+          "label": "Том",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "issue",
+          "label": "Номер",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "pages",
+          "label": "Страницы",
+          "type": "text",
+          "required": true,
+          "hint": "Например: 45-52"
+        },
+        {
+          "name": "doi",
+          "label": "DOI",
+          "type": "text",
+          "required": false,
+          "hint": "Например: 10.1038/nphys1170"
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "authors",
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "journal"
+          ],
+          "join": " ",
+          "prefix": "// ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "year"
+          ],
+          "join": " ",
+          "prefix": "— ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "volume"
+          ],
+          "join": " ",
+          "prefix": "— Т. ",
+          "suffix": ","
+        },
+        {
+          "fields": [
+            "issue"
+          ],
+          "join": " ",
+          "prefix": "№ ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "pages"
+          ],
+          "join": " ",
+          "prefix": "— С. ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "doi"
+          ],
+          "join": " ",
+          "prefix": "— DOI ",
+          "suffix": "."
+        }
+      ]
+    },
+    "collection-article": {
+      "label": "Статья из сборника",
+      "fields": [
+        {
+          "name": "authors",
+          "label": "Авторы",
+          "type": "text",
+          "required": true,
+          "hint": "Иванов И. И.; Петров П. П. — разделяйте авторов точкой с запятой"
+        },
+        {
+          "name": "title",
+          "label": "Название статьи",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "collection",
+          "label": "Название сборника",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "city",
+          "label": "Город",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "publisher",
+          "label": "Издательство",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "label": "Год",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pages",
+          "label": "Страницы",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "doi",
+          "label": "DOI",
+          "type": "text",
+          "required": false,
+          "hint": "Например: 10.1038/nphys1170"
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "authors",
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "collection"
+          ],
+          "join": " ",
+          "prefix": "// ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "city",
+            "publisher"
+          ],
+          "join": " : ",
+          "prefix": "— ",
+          "suffix": ","
+        },
+        {
+          "fields": [
+            "year"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "pages"
+          ],
+          "join": " ",
+          "prefix": "— С. ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "doi"
+          ],
+          "join": " ",
+          "prefix": "— DOI ",
+          "suffix": "."
+        }
+      ]
+    },
+    "thesis": {
+      "label": "Диссертация",
+      "fields": [
+        {
+          "name": "author",
+          "label": "Автор",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "authorFull",
+          "label": "Автор полностью",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "title",
+          "label": "Название",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "degree",
+          "label": "Степень",
+          "type": "select",
+          "options": [
+            "канд. техн.",
+            "д-ра техн.",
+            "канд. физ.-мат.",
+            "д-ра физ.-мат.",
+            "канд. экон.",
+            "д-ра экон.",
+            "канд. филол.",
+            "д-ра филол.",
+            "канд. пед.",
+            "д-ра пед.",
+            "канд. ист.",
+            "д-ра ист.",
+            "канд. юрид.",
+            "д-ра юрид."
+          ],
+          "required": true
+        },
+        {
+          "name": "specialtyCode",
+          "label": "Код специальности",
+          "type": "text",
+          "required": true,
+          "hint": "Например: 05.13.10"
+        },
+        {
+          "name": "city",
+          "label": "Город",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "label": "Год",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pages",
+          "label": "Количество страниц",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "author",
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": " : дис."
+        },
+        {
+          "fields": [
+            "degree"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": " наук :"
+        },
+        {
+          "fields": [
+            "specialtyCode"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "authorFull"
+          ],
+          "join": " ",
+          "prefix": "/ ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "city",
+            "year"
+          ],
+          "join": ", ",
+          "prefix": "— ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "pages"
+          ],
+          "join": " ",
+          "prefix": "— ",
+          "suffix": " с."
+        }
+      ]
+    },
+    "abstract": {
+      "label": "Автореферат диссертации",
+      "fields": [
+        {
+          "name": "author",
+          "label": "Автор",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "authorFull",
+          "label": "Автор полностью",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "title",
+          "label": "Название",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "degree",
+          "label": "Степень",
+          "type": "select",
+          "options": [
+            "канд. техн.",
+            "д-ра техн.",
+            "канд. физ.-мат.",
+            "д-ра физ.-мат.",
+            "канд. экон.",
+            "д-ра экон.",
+            "канд. филол.",
+            "д-ра филол.",
+            "канд. пед.",
+            "д-ра пед.",
+            "канд. ист.",
+            "д-ра ист.",
+            "канд. юрид.",
+            "д-ра юрид."
+          ],
+          "required": true
+        },
+        {
+          "name": "specialtyCode",
+          "label": "Код специальности",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "city",
+          "label": "Город",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "label": "Год",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "pages",
+          "label": "Количество страниц",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "author",
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": " : автореф. дис."
+        },
+        {
+          "fields": [
+            "degree"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": " наук :"
+        },
+        {
+          "fields": [
+            "specialtyCode"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "authorFull"
+          ],
+          "join": " ",
+          "prefix": "/ ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "city",
+            "year"
+          ],
+          "join": ", ",
+          "prefix": "— ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "pages"
+          ],
+          "join": " ",
+          "prefix": "— ",
+          "suffix": " с."
+        }
+      ]
+    },
+    "patent": {
+      "label": "Патент",
+      "fields": [
+        {
+          "name": "country",
+          "label": "Страна",
+          "type": "text",
+          "required": true,
+          "hint": "Например: РФ"
+        },
+        {
+          "name": "patentNumber",
+          "label": "Номер патента",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "title",
+          "label": "Название",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "authors",
+          "label": "Авторы",
+          "type": "text",
+          "required": true,
+          "hint": "Иванов И. И.; Петров П. П. — разделяйте авторов точкой с запятой"
+        },
+        {
+          "name": "publishDate",
+          "label": "Дата публикации",
+          "type": "date",
+          "required": true
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "country"
+          ],
+          "join": " ",
+          "prefix": "Патент ",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "patentNumber"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "authors"
+          ],
+          "join": " ",
+          "prefix": "/ ",
+          "suffix": " ;"
+        },
+        {
+          "fields": [
+            "publishDate"
+          ],
+          "join": " ",
+          "prefix": "опубл. ",
+          "suffix": "."
+        }
+      ]
+    },
+    "regulation": {
+      "label": "Нормативный документ",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Название",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "documentType",
+          "label": "Тип документа",
+          "type": "select",
+          "options": [
+            "Федеральный закон",
+            "ГОСТ",
+            "Приказ",
+            "Постановление"
+          ],
+          "required": true
+        },
+        {
+          "name": "approvalDate",
+          "label": "Дата утверждения",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "number",
+          "label": "Номер",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "city",
+          "label": "Город",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "publisher",
+          "label": "Издательство",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "year",
+          "label": "Год",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": " :"
+        },
+        {
+          "fields": [
+            "documentType"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "approvalDate"
+          ],
+          "join": " ",
+          "prefix": "от ",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "number"
+          ],
+          "join": " ",
+          "prefix": "№ ",
+          "suffix": "."
+        },
+        {
+          "fields": [
+            "city",
+            "publisher"
+          ],
+          "join": " : ",
+          "prefix": "— ",
+          "suffix": ","
+        },
+        {
+          "fields": [
+            "year"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": "."
+        }
+      ]
+    },
+    "internet-resource": {
+      "label": "Интернет-ресурс",
+      "fields": [
+        {
+          "name": "authors",
+          "label": "Авторы",
+          "type": "text",
+          "required": false,
+          "hint": "Иванов И. И.; Петров П. П. — разделяйте авторов точкой с запятой"
+        },
+        {
+          "name": "title",
+          "label": "Название",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "url",
+          "label": "URL",
+          "type": "url",
+          "required": true
+        },
+        {
+          "name": "accessDate",
+          "label": "Дата обращения",
+          "type": "date",
+          "required": true
+        }
+      ],
+      "parts": [
+        {
+          "fields": [
+            "authors",
+            "title"
+          ],
+          "join": " ",
+          "prefix": "",
+          "suffix": " [Электронный ресурс]."
+        },
+        {
+          "fields": [
+            "url"
+          ],
+          "join": " ",
+          "prefix": "— URL: ",
+          "suffix": ""
+        },
+        {
+          "fields": [
+            "accessDate"
+          ],
+          "join": " ",
+          "prefix": "(дата обращения: ",
+          "suffix": ")."
+        }
+      ]
+    }
+  }
+}
