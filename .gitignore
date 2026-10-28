@@ -6,3 +6,4 @@ backend/target/
 *.tsbuildinfo
 .idea/
 *.iml
+research-runs/

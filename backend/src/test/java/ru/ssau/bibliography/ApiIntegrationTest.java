@@ -71,6 +71,39 @@ class ApiIntegrationTest {
   }
 
   @Test
+  void sharedProfilesAreAvailableThroughApplicationApi() throws Exception {
+    mvc.perform(get("/api/formatting-profiles/"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.profiles.length()").value(2));
+    postJson(
+            "/api/format-profile/",
+            Map.of(
+                "profile", "gost-7-0-108-2022",
+                "fields",
+                    Map.of(
+                        "DOCUMENT_TYPE",
+                        "Журнальная статья",
+                        "TITLE",
+                        "Пример статьи",
+                        "AUTHORS",
+                        "Иванов И. И.",
+                        "CONTAINER_TITLE",
+                        "Журнал",
+                        "YEAR",
+                        "2024"),
+                "context",
+                    Map.of("url", "https://example.test/article", "accessDate", "2026-10-27")))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.profile").value("gost-7-0-108-2022"))
+        .andExpect(jsonPath("$.status").value("FORMATTED"))
+        .andExpect(
+            jsonPath("$.formatted")
+                .value(
+                    "Иванов, И. И. Пример статьи // Журнал. — 2024. — URL:"
+                        + " https://example.test/article (дата обращения: 27.10.2026)."));
+  }
+
+  @Test
   void invalidPayloads() throws Exception {
     for (Object body :
         new Object[] {
