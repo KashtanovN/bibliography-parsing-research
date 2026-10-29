@@ -152,4 +152,75 @@ class ExperimentProtocolTest {
             new String[] {"--parse-text=Текст", "--protocol=unused"}))
       assertThrows(IllegalArgumentException.class, () -> ParseReferencesCommand.run(args));
   }
+
+  @Test
+  void supplementalAnyStyleFreezesSeparatelyAndUsesTheSameEvaluationAndContexts() throws Exception {
+    Path worker = temporary.resolve("fake-worker.sh");
+    Files.writeString(
+        worker,
+        """
+#!/bin/sh
+printf '%%s\\n' '{"protocol":"anystyle-jsonl-v1","version":"fake","modelSha256":"%s","workerSha256":"%s","assetsSha256":{"test":"abc"}}'
+while IFS= read -r request; do
+  printf '%%s\\n' '{"result":[{"title":["Тест"],"type":"book"}]}'
+done
+"""
+            .formatted("a".repeat(64), "b".repeat(64)));
+    assertTrue(worker.toFile().setExecutable(true));
+    Path dev = temporary.resolve("any-dev");
+    assertEquals(
+        0,
+        ParseReferencesCommand.run(
+            new String[] {
+              "--parse-dataset=../датасет.xlsx",
+              "--method=anystyle",
+              "--anystyle-command=" + worker,
+              "--output=" + dev
+            }));
+    Path directory = freeze(dev);
+    JsonNode protocol = ExperimentProtocol.read(directory);
+    assertTrue(protocol.path("scope").asText().contains("Supplemental"));
+    assertTrue(protocol.path("methods").has("anystyle"));
+    var changed = ((ObjectNode) protocol.path("methods")).deepCopy();
+    ((ObjectNode) changed.path("anystyle").path("runtime")).put("modelSha256", "c".repeat(64));
+    assertThrows(
+        IllegalArgumentException.class,
+        () ->
+            ExperimentProtocol.validate(
+                protocol, protocol.path("datasetSha256").asText(), changed, 408, 180));
+    Path test = temporary.resolve("any-test");
+    assertEquals(
+        0,
+        ParseReferencesCommand.run(
+            new String[] {
+              "--parse-dataset=../датасет.xlsx",
+              "--method=anystyle",
+              "--anystyle-command=" + worker,
+              "--split=test",
+              "--protocol=" + directory,
+              "--output=" + test
+            }));
+    var saved = SavedResearchRun.read(test, Path.of("../датасет.xlsx"));
+    assertEquals(408, saved.predictions().get("anystyle").size());
+    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + test, "--dataset=../датасет.xlsx"});
+    FormatRunCommand.run(new String[] {"--format-run=" + test, "--dataset=../датасет.xlsx"});
+    QualityReviewCommand.run(new String[] {"--quality-run=" + test, "--dataset=../датасет.xlsx"});
+    assertEquals(
+        408,
+        json.readTree(test.resolve("formatting/formatting.json").toFile()).path("records").asInt());
+    assertFalse(
+        json.readTree(test.resolve("quality/quality_metrics.json").toFile())
+            .path("llmIncluded")
+            .asBoolean());
+    Files.writeString(worker, "#!/bin/sh\nexit 1\n");
+    assertThrows(
+        java.io.IOException.class,
+        () ->
+            ExperimentProtocol.run(
+                new String[] {
+                  "--freeze-experiment=" + dev,
+                  "--dataset=../датасет.xlsx",
+                  "--protocol-output=" + temporary.resolve("changed")
+                }));
+  }
 }

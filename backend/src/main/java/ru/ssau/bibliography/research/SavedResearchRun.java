@@ -62,7 +62,7 @@ public record SavedResearchRun(
     var names = methods.fieldNames();
     while (names.hasNext()) {
       String method = names.next();
-      if (!Set.of("rules", "grobid", "ollama").contains(method))
+      if (!Set.of("rules", "grobid", "ollama", "anystyle").contains(method))
         throw new IllegalArgumentException("Неизвестный метод: " + method);
       List<Prediction> rows = new ArrayList<>();
       Set<String> ids = new HashSet<>();

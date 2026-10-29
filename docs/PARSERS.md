@@ -95,3 +95,7 @@ java -jar ../research-runs/full-dev-20261028/frozen-protocol/application.jar \
 Тестовые HTTP-серверы проверяют интеграцию, а не качество настоящих GROBID/Qwen. До статьи нужен реальный прогон на зафиксированных версиях сервисов и отдельный расчёт метрик.
 
 Первичные документы: [GROBID API](https://grobid.readthedocs.io/en/latest/Grobid-service/), [Docker](https://grobid.readthedocs.io/en/latest/Grobid-docker/), [Ollama chat](https://docs.ollama.com/api/chat), [JSON schema](https://docs.ollama.com/capabilities/structured-outputs), [Qwen3:8b](https://ollama.com/library/qwen3:8b).
+
+## Дополнительный AnyStyle
+
+Четвёртый метод запускается отдельно через `--method=anystyle`. Установка, отображение полей, собственный DEV/TEST-протокол и объединение неизменённых ответов описаны в [ANYSTYLE.md](ANYSTYLE.md). Параметр `all` выше сохраняет значение трёх исходных методов; их TEST заново запускать не требуется.

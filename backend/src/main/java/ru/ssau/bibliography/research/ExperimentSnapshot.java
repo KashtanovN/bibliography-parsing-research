@@ -29,6 +29,8 @@ final class ExperimentSnapshot {
             RulesCitationParser.class,
             GrobidCitationParser.class,
             OllamaCitationParser.class,
+            AnyStyleCitationParser.class,
+            CompareRunsCommand.class,
             ParserHttpClient.class,
             FieldNormalization.class,
             ExtractionEvaluator.class,

@@ -24,6 +24,7 @@ public final class ParseReferencesCommand {
           "ollama-url",
           "model",
           "timeout-seconds",
+          "anystyle-command",
           "protocol");
 
   private ParseReferencesCommand() {}
@@ -62,11 +63,11 @@ public final class ParseReferencesCommand {
     }
     if (finalTest
         && (!options.containsKey("protocol")
-            || !options.getOrDefault("method", "rules").equals("all")
+            || !Set.of("all", "anystyle").contains(options.getOrDefault("method", "rules"))
             || options.containsKey("limit")))
       throw new IllegalArgumentException(
-          "Для TEST нужны --method=all и --protocol=ПАПКА, без --limit; настройка проводится на"
-              + " DEV");
+          "Для TEST нужны --method=all или anystyle и --protocol=ПАПКА, без --limit; настройка"
+              + " проводится на DEV");
     if (!finalTest && options.containsKey("protocol"))
       throw new IllegalArgumentException("--protocol применяется только к итоговому TEST");
     int limit = positive(options.getOrDefault("limit", Integer.toString(inputs.size())), "limit");
@@ -75,111 +76,118 @@ public final class ParseReferencesCommand {
         Duration.ofSeconds(
             positive(options.getOrDefault("timeout-seconds", "180"), "timeout-seconds"));
     List<CitationParser> methods = methods(options, timeout);
-    Path destination =
-        Path.of(
-            options.getOrDefault(
-                "output", "../research-runs/" + Instant.now().toString().replace(':', '-')));
-    Path parent = destination.toAbsolutePath().getParent();
-    metadata.put("records", inputs.size());
-    metadata.put("javaVersion", System.getProperty("java.version"));
-    metadata.put("environment", ExperimentSnapshot.environment());
-    metadata.put("implementation", ExperimentSnapshot.implementation());
-    metadata.put("timeoutSeconds", timeout.toSeconds());
-    metadata.put("arguments", List.of(args));
-    Map<String, Object> configurations = new LinkedHashMap<>();
-    List<String> setupWarnings = new ArrayList<>();
-    for (CitationParser parser : methods) {
-      Map<String, Object> config = new LinkedHashMap<>(parser.configuration());
-      try {
-        if (parser instanceof GrobidCitationParser grobid) config.putAll(grobid.serverMetadata());
-        if (parser instanceof OllamaCitationParser ollama) config.putAll(ollama.serverMetadata());
-      } catch (IOException e) {
-        setupWarnings.add(parser.name() + ": метаданные сервера недоступны: " + errorMessage(e));
-      }
-      configurations.put(parser.name(), config);
-    }
-    metadata.put("methods", configurations);
-    metadata.put("setupWarnings", setupWarnings);
-    if (finalTest) {
-      if (!setupWarnings.isEmpty())
-        throw new IllegalArgumentException("Для TEST не удалось подтвердить версии сервисов");
-      var protocol = ExperimentProtocol.read(Path.of(options.get("protocol")));
-      ExperimentProtocol.validate(
-          protocol,
-          (String) metadata.get("datasetSha256"),
-          JSON.valueToTree(configurations),
-          inputs.size(),
-          Math.toIntExact(timeout.toSeconds()));
-    }
-    Files.createDirectories(parent);
-    Files.createDirectory(destination); // Never overwrite a previous run.
-    if (finalTest)
-      metadata.put(
-          "protocolSha256",
-          ExperimentProtocol.copy(
-              Path.of(options.get("protocol")), destination.resolve("protocol")));
-    JSON.writerWithDefaultPrettyPrinter()
-        .writeValue(destination.resolve("run.json").toFile(), metadata);
-    Map<String, Map<String, Integer>> counts = new LinkedHashMap<>();
-    int failures = 0;
-    for (CitationParser parser : methods) {
-      Map<String, Integer> statuses = new LinkedHashMap<>();
-      int sequence = 0;
-      try (var writer =
-          Files.newBufferedWriter(
-              destination.resolve(parser.name() + ".jsonl"),
-              StandardCharsets.UTF_8,
-              StandardOpenOption.CREATE_NEW)) {
-        for (ParserInput input : inputs) {
-          long start = System.nanoTime();
-          Map<String, Object> result = new LinkedHashMap<>();
-          result.put("id", input.id());
-          result.put("method", parser.name());
-          result.put("rawCitation", input.rawCitation());
-          result.put("sequence", ++sequence);
-          result.put("startedAt", Instant.now().toString());
-          String status;
-          try {
-            var parsed = parser.parse(input);
-            status = parsed.fields().isEmpty() ? "EMPTY" : "SUCCESS";
-            result.put("fields", parsed.fields());
-            result.put("warnings", parsed.warnings());
-            result.put("rawResponse", parsed.rawResponse());
-          } catch (IOException e) {
-            status = "ERROR";
-            failures++;
-            result.put("fields", Map.of());
-            result.put("error", errorMessage(e));
-            if (e instanceof CitationParser.ParseFailure failure)
-              result.put("rawResponse", failure.rawResponse());
-          }
-          result.put("status", status);
-          result.put("finishedAt", Instant.now().toString());
-          result.put("durationMillis", (System.nanoTime() - start) / 1_000_000L);
-          statuses.merge(status, 1, Integer::sum);
-          writer.write(JSON.writeValueAsString(result));
-          writer.newLine();
-          writer.flush();
+    try {
+      Path destination =
+          Path.of(
+              options.getOrDefault(
+                  "output", "../research-runs/" + Instant.now().toString().replace(':', '-')));
+      Path parent = destination.toAbsolutePath().getParent();
+      metadata.put("records", inputs.size());
+      metadata.put("javaVersion", System.getProperty("java.version"));
+      metadata.put("environment", ExperimentSnapshot.environment());
+      metadata.put("implementation", ExperimentSnapshot.implementation());
+      metadata.put("timeoutSeconds", timeout.toSeconds());
+      metadata.put("arguments", List.of(args));
+      Map<String, Object> configurations = new LinkedHashMap<>();
+      List<String> setupWarnings = new ArrayList<>();
+      for (CitationParser parser : methods) {
+        Map<String, Object> config = new LinkedHashMap<>(parser.configuration());
+        try {
+          if (parser instanceof GrobidCitationParser grobid) config.putAll(grobid.serverMetadata());
+          if (parser instanceof OllamaCitationParser ollama) config.putAll(ollama.serverMetadata());
+          if (parser instanceof AnyStyleCitationParser anystyle)
+            config.putAll(anystyle.serverMetadata());
+        } catch (IOException e) {
+          setupWarnings.add(parser.name() + ": метаданные сервера недоступны: " + errorMessage(e));
         }
+        configurations.put(parser.name(), config);
       }
-      counts.put(parser.name(), statuses);
-    }
-    metadata.put("executionState", "COMPLETED");
-    metadata.put("finishedAt", Instant.now().toString());
-    JSON.writerWithDefaultPrettyPrinter()
-        .writeValue(destination.resolve("run.json").toFile(), metadata);
-    Map<String, Object> summary =
-        Map.of(
-            "output",
-            destination.toAbsolutePath().normalize().toString(),
-            "records",
+      metadata.put("methods", configurations);
+      metadata.put("setupWarnings", setupWarnings);
+      if (finalTest) {
+        if (!setupWarnings.isEmpty())
+          throw new IllegalArgumentException("Для TEST не удалось подтвердить версии сервисов");
+        var protocol = ExperimentProtocol.read(Path.of(options.get("protocol")));
+        ExperimentProtocol.validate(
+            protocol,
+            (String) metadata.get("datasetSha256"),
+            JSON.valueToTree(configurations),
             inputs.size(),
-            "statuses",
-            counts);
-    JSON.writerWithDefaultPrettyPrinter()
-        .writeValue(destination.resolve("summary.json").toFile(), summary);
-    System.out.println(JSON.writerWithDefaultPrettyPrinter().writeValueAsString(summary));
-    return failures == 0 ? 0 : 3;
+            Math.toIntExact(timeout.toSeconds()));
+      }
+      Files.createDirectories(parent);
+      Files.createDirectory(destination); // Never overwrite a previous run.
+      if (finalTest)
+        metadata.put(
+            "protocolSha256",
+            ExperimentProtocol.copy(
+                Path.of(options.get("protocol")), destination.resolve("protocol")));
+      JSON.writerWithDefaultPrettyPrinter()
+          .writeValue(destination.resolve("run.json").toFile(), metadata);
+      Map<String, Map<String, Integer>> counts = new LinkedHashMap<>();
+      int failures = 0;
+      for (CitationParser parser : methods) {
+        Map<String, Integer> statuses = new LinkedHashMap<>();
+        int sequence = 0;
+        try (var writer =
+            Files.newBufferedWriter(
+                destination.resolve(parser.name() + ".jsonl"),
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE_NEW)) {
+          for (ParserInput input : inputs) {
+            long start = System.nanoTime();
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("id", input.id());
+            result.put("method", parser.name());
+            result.put("rawCitation", input.rawCitation());
+            result.put("sequence", ++sequence);
+            result.put("startedAt", Instant.now().toString());
+            String status;
+            try {
+              var parsed = parser.parse(input);
+              status = parsed.fields().isEmpty() ? "EMPTY" : "SUCCESS";
+              result.put("fields", parsed.fields());
+              result.put("warnings", parsed.warnings());
+              result.put("rawResponse", parsed.rawResponse());
+            } catch (IOException e) {
+              status = "ERROR";
+              failures++;
+              result.put("fields", Map.of());
+              result.put("error", errorMessage(e));
+              if (e instanceof CitationParser.ParseFailure failure)
+                result.put("rawResponse", failure.rawResponse());
+            }
+            result.put("status", status);
+            result.put("finishedAt", Instant.now().toString());
+            result.put("durationMillis", (System.nanoTime() - start) / 1_000_000L);
+            statuses.merge(status, 1, Integer::sum);
+            writer.write(JSON.writeValueAsString(result));
+            writer.newLine();
+            writer.flush();
+          }
+        }
+        counts.put(parser.name(), statuses);
+      }
+      metadata.put("executionState", "COMPLETED");
+      metadata.put("finishedAt", Instant.now().toString());
+      JSON.writerWithDefaultPrettyPrinter()
+          .writeValue(destination.resolve("run.json").toFile(), metadata);
+      Map<String, Object> summary =
+          Map.of(
+              "output",
+              destination.toAbsolutePath().normalize().toString(),
+              "records",
+              inputs.size(),
+              "statuses",
+              counts);
+      JSON.writerWithDefaultPrettyPrinter()
+          .writeValue(destination.resolve("summary.json").toFile(), summary);
+      System.out.println(JSON.writerWithDefaultPrettyPrinter().writeValueAsString(summary));
+      return failures == 0 ? 0 : 3;
+    } finally {
+      for (CitationParser parser : methods)
+        if (parser instanceof AnyStyleCitationParser anystyle) anystyle.close();
+    }
   }
 
   private static int positive(String text, String name) {
@@ -215,6 +223,12 @@ public final class ParseReferencesCommand {
     String method = options.getOrDefault("method", "rules");
     return switch (method) {
       case "rules" -> List.of(new RulesCitationParser());
+      case "anystyle" ->
+          List.of(
+              new AnyStyleCitationParser(
+                  Path.of(
+                      options.getOrDefault("anystyle-command", "../scripts/anystyle-worker.sh")),
+                  timeout));
       case "grobid" ->
           List.of(
               new GrobidCitationParser(
@@ -236,7 +250,8 @@ public final class ParseReferencesCommand {
                   options.getOrDefault("model", "qwen3:8b"),
                   timeout));
       default ->
-          throw new IllegalArgumentException("--method должен быть rules, grobid, ollama или all");
+          throw new IllegalArgumentException(
+              "--method должен быть rules, grobid, ollama, anystyle или all (три исходных метода)");
     };
   }
 }

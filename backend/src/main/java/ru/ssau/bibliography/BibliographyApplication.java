@@ -11,6 +11,15 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class BibliographyApplication {
   public static void main(String[] args) {
+    if (Arrays.stream(args).anyMatch(a -> a.startsWith("--compare-runs="))) {
+      try {
+        ru.ssau.bibliography.research.CompareRunsCommand.run(args);
+      } catch (java.io.IOException | IllegalArgumentException e) {
+        System.err.println("Ошибка объединения результатов: " + e.getMessage());
+        System.exit(2);
+      }
+      return;
+    }
     if (Arrays.stream(args).anyMatch(a -> a.startsWith("--freeze-experiment="))) {
       try {
         ru.ssau.bibliography.research.ExperimentProtocol.run(args);

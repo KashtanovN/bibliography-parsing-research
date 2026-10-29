@@ -44,8 +44,10 @@ public final class ExperimentProtocol {
     var saved = SavedResearchRun.read(run, datasetPath);
     if (saved.split() != ResearchDataset.Split.DEV
         || saved.references().size() != saved.dataset().references(ResearchDataset.Split.DEV).size()
-        || !saved.predictions().keySet().equals(ALL))
-      throw new IllegalArgumentException("Нужен полный DEV-прогон всех трёх методов");
+        || !(saved.predictions().keySet().equals(ALL)
+            || saved.predictions().keySet().equals(Set.of("anystyle"))))
+      throw new IllegalArgumentException(
+          "Нужен полный DEV-прогон трёх методов либо отдельного AnyStyle");
     if (!Files.isRegularFile(run.resolve("summary.json")))
       throw new IllegalArgumentException("DEV-прогон не завершён: нет summary.json");
     if (!saved.manifest().path("setupWarnings").isArray()
@@ -61,16 +63,31 @@ public final class ExperimentProtocol {
     }
     if (timeout < 1) throw new IllegalArgumentException("Тайм-аут должен быть положительным");
     Duration duration = Duration.ofSeconds(timeout);
+    boolean supplemental = saved.predictions().keySet().equals(Set.of("anystyle"));
     List<CitationParser> current =
-        List.of(
-            new RulesCitationParser(),
-            new GrobidCitationParser(
-                URI.create(methods.path("grobid").path("endpoint").asText()), duration),
-            new OllamaCitationParser(
-                URI.create(methods.path("ollama").path("endpoint").asText()),
-                methods.path("ollama").path("model").asText(),
-                duration));
+        supplemental
+            ? List.of(
+                new AnyStyleCitationParser(
+                    Path.of(methods.path("anystyle").path("command").asText()), duration))
+            : List.of(
+                new RulesCitationParser(),
+                new GrobidCitationParser(
+                    URI.create(methods.path("grobid").path("endpoint").asText()), duration),
+                new OllamaCitationParser(
+                    URI.create(methods.path("ollama").path("endpoint").asText()),
+                    methods.path("ollama").path("model").asText(),
+                    duration));
     for (var parser : current) {
+      if (parser instanceof AnyStyleCitationParser anystyle) {
+        try (anystyle) {
+          if (!JSON.valueToTree(anystyle.serverMetadata().get("runtime"))
+              .equals(methods.path("anystyle").path("runtime")))
+            throw new IllegalArgumentException("AnyStyle/модель изменены после DEV");
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          throw new IOException("Проверка AnyStyle прервана", e);
+        }
+      }
       JsonNode config = JSON.valueToTree(parser.configuration());
       var names = config.fieldNames();
       while (names.hasNext()) {
@@ -89,6 +106,11 @@ public final class ExperimentProtocol {
       policyHashes.put(name, ExperimentSnapshot.sha(policies.resolve(name)));
     ObjectNode protocol = JSON.createObjectNode();
     protocol.put("version", VERSION);
+    if (supplemental)
+      protocol.put(
+          "scope",
+          "Supplemental AnyStyle comparison added after the initial three-method TEST; not a"
+              + " preregistration of that earlier comparison");
     protocol.put("frozenAt", Instant.now().toString());
     protocol.put("datasetSha256", saved.dataset().sha256());
     protocol.put("devRecords", saved.references().size());
@@ -108,7 +130,7 @@ public final class ExperimentProtocol {
     ObjectNode evidence = protocol.putObject("devArtifacts");
     evidence.put("run.json", ExperimentSnapshot.sha(run.resolve("run.json")));
     evidence.put("summary.json", ExperimentSnapshot.sha(run.resolve("summary.json")));
-    for (String method : new TreeSet<>(ALL))
+    for (String method : new TreeSet<>(saved.predictions().keySet()))
       evidence.put(method + ".jsonl", ExperimentSnapshot.sha(run.resolve(method + ".jsonl")));
     protocol.put("devImplementationRecorded", saved.manifest().has("implementation"));
     Path executable = executable();
@@ -179,6 +201,16 @@ public final class ExperimentProtocol {
   private static void requireMetadata(JsonNode methods) {
     Set<String> names = new HashSet<>();
     methods.fieldNames().forEachRemaining(names::add);
+    if (methods.isObject() && names.equals(Set.of("anystyle"))) {
+      JsonNode runtime = methods.path("anystyle").path("runtime");
+      if (!runtime.path("modelSha256").asText().matches("[a-f0-9]{64}")
+          || !runtime.path("workerSha256").asText().matches("[a-f0-9]{64}")
+          || runtime.path("version").asText().isBlank()
+          || !runtime.path("assetsSha256").isObject()
+          || runtime.path("assetsSha256").isEmpty())
+        throw new IllegalArgumentException("Нужны подтверждённые версии и модель AnyStyle");
+      return;
+    }
     if (!methods.isObject()
         || !names.equals(ALL)
         || methods.path("grobid").path("serverVersion").asText().isBlank()

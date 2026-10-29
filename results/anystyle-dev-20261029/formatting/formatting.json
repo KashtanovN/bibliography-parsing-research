@@ -1,0 +1,846 @@
+{
+  "createdAt" : "2026-10-29T10:54:00.914242Z",
+  "formatterVersion" : "shared-short-v1",
+  "datasetSha256" : "ef2204f408cb3b767466f48f863660fbc56ddb68702495f6b13fdbe34db368e2",
+  "split" : "DEV",
+  "records" : 92,
+  "contextSha256" : "7098d72cf73e9c666fc28767118fc7158d5d1570b79c4aa06fa0a73075427f06",
+  "contexts" : {
+    "R001" : {
+      "profile" : "GOST108",
+      "url" : "https://www.ecology-kalvis.ru/jour/article/view/940",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R002" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R003" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R006" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R007" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R008" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R014" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R015" : {
+      "profile" : "GOST108",
+      "url" : "https://sapi.bntu.by/jour/article/view/658",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R019" : {
+      "profile" : "GOST108",
+      "url" : "https://s-lib.com/en/issues/pvsge_2023_02_a13/",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R022" : {
+      "profile" : "GOST108",
+      "url" : "https://foresight-journal.hse.ru/en/article/view/21917",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R023" : {
+      "profile" : "GOST108",
+      "url" : "https://uzakuesc.elpub.ru/jour/article/view/69",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R034" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.istu.edu/izvestia_invest/journals/2019/30/articles/04",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R035" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R036" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/ecology/article/view/39779",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R042" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R043" : {
+      "profile" : "GOST108",
+      "url" : "https://peasantstudies.ru/phocadownload/10.22394-2500-1809-2017-2-1-90-101.pdf",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R044" : {
+      "profile" : "GOST108",
+      "url" : "https://woeam.elpub.ru/jour/article/view/622",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R046" : {
+      "profile" : "GOST108",
+      "url" : "https://hum-ecol.ru/1728-0869/article/view/17192",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R047" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R048" : {
+      "profile" : "GOST108",
+      "url" : "https://www.dvfu.ru/upload/medialibrary/695/%D0%90%D0%A2%D0%A0%202017%20%E2%84%96%201_72-81.pdf",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R049" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/ecology/article/view/31899",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R058" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R092" : {
+      "profile" : "GOST108",
+      "url" : "https://www.mais-journal.ru/jour/article/view/1764",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R093" : {
+      "profile" : "GOST108",
+      "url" : "https://moitvivt.ru/ru/journal/pdf?id=1561",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R094" : {
+      "profile" : "GOST108",
+      "url" : "https://ce.if-mstuca.ru/jour/article/view/93",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R095" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R096" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R097" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R100" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R116" : {
+      "profile" : "GOST108",
+      "url" : "http://nuclphys.sinp.msu.ru/school/s07/s07_03.pdf",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R118" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R119" : {
+      "profile" : "GOST108",
+      "url" : "https://cyberleninka.ru/article/n/finansovyy-kontrol-v-sfere-gosudarstvennogo-oboronnogo-zakaza",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R132" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R133" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/engineering-researches/article/view/17330",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R134" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R135" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R136" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R137" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R147" : {
+      "profile" : "GOST108",
+      "url" : "http://vestnik.ispu.ru/sites/vestnik.ispu.ru/files/published/5-25-str.68-80.pdf",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R159" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R163" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R177" : {
+      "profile" : "GOST108",
+      "url" : "https://discourse.elpub.ru/jour/article/view/626",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R178" : {
+      "profile" : "GOST108",
+      "url" : "https://cyberleninka.ru/article/n/integratsiya-multimodalnyh-tehnologiy-v-obrazovatelnyy-protsess-na-primere-razrabotki-modeli-mashinnogo-obucheniya-na-platforme",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R184" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R185" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R214" : {
+      "profile" : "GOST108",
+      "url" : "https://nbpublish.com/library_read_article.php?id=22058",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R215" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R216" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/philosophy/article/view/42155",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R217" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R219" : {
+      "profile" : "GOST108",
+      "url" : "https://www.persee.fr/doc/slave_0080-2557_2002_num_74_2_6823",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R258" : {
+      "profile" : "GOST108",
+      "url" : "https://reflexio.elpub.ru/jour/article/view/105",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R261" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R262" : {
+      "profile" : "GOST108",
+      "url" : "https://psyjournals.ru/en/journals/pse/archive/2024_n4/Verkhoturova",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R263" : {
+      "profile" : "GOST108",
+      "url" : "https://vovr.elpub.ru/jour/article/view/3821",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R264" : {
+      "profile" : "GOST108",
+      "url" : "https://vovr.elpub.ru/jour/article/view/3035",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R275" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/psychology-pedagogics/article/view/40381",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R279" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R280" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R281" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R282" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R288" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R289" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R290" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R294" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/public-administration/article/view/38604",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R295" : {
+      "profile" : "GOST108",
+      "url" : "https://www.narodonaselenie-journal.ru/index.php/population/article/view/8870",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R303" : {
+      "profile" : "GOST108",
+      "url" : "http://vestnik.pstu.ru/get/_res/fs/file.pdf/9177/POSITIVE+AND+NEGATIVE+ASPECTS+OF+LIVING+IN+MULTI-GENERATIONAL+FAMILIESfile.pdf",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R304" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R305" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R353" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R354" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R355" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/structural-mechanics/article/view/41541",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R368" : {
+      "profile" : "GOST108",
+      "url" : "https://journals.rudn.ru/structural-mechanics/article/view/42700",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R374" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R375" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R376" : {
+      "profile" : "GOST108",
+      "url" : "https://izvuzmash.bmstu.ru/catalog/avroc/hidden/1541.html",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R379" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R386" : {
+      "profile" : "GOST108",
+      "url" : "https://www.stsg-donstu.ru/jour/article/view/72",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R390" : {
+      "profile" : "GOST108",
+      "url" : "http://urban-development.ru/2011/7.pdf",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R399" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R444" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R445" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R446" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R448" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R449" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R450" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R451" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R452" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R455" : {
+      "profile" : "GOST705",
+      "url" : "",
+      "accessDate" : null,
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R456" : {
+      "profile" : "GOST108",
+      "url" : "https://ru.wix.com/",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R458" : {
+      "profile" : "GOST108",
+      "url" : "http://joomla.ru/",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R459" : {
+      "profile" : "GOST108",
+      "url" : "https://ru.wordpress.org/",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    },
+    "R460" : {
+      "profile" : "GOST108",
+      "url" : "https://drupal.ru/",
+      "accessDate" : "2026-10-27",
+      "hostingResource" : "",
+      "republicationNote" : "",
+      "paginationPreserved" : null,
+      "accessNote" : ""
+    }
+  },
+  "sourceRun" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/anystyle-dev-20261029",
+  "statuses" : {
+    "anystyle" : {
+      "NEEDS_REVIEW" : 69,
+      "FORMATTED" : 23
+    }
+  },
+  "scope" : "Shared formatting of predicted fields only; algorithm completion is not normative correctness"
+}
