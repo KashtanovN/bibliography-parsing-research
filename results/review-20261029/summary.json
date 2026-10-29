@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-29",
+  "datasetSha256": "ef2204f408cb3b767466f48f863660fbc56ddb68702495f6b13fdbe34db368e2",
+  "recordsPerMethod": 408,
+  "formatting": {
+    "grobid": {
+      "eligible": 403,
+      "correct": 34,
+      "incorrect": 369,
+      "pending": 0,
+      "unclear": 0,
+      "excludedAmbiguous": 5,
+      "complete": true,
+      "fullyCorrectFormattingRate": 0.08436724565756824,
+      "confirmedLowerBound": 0.08436724565756824,
+      "possibleUpperBound": 0.08436724565756824
+    },
+    "ollama": {
+      "eligible": 403,
+      "correct": 172,
+      "incorrect": 231,
+      "pending": 0,
+      "unclear": 0,
+      "excludedAmbiguous": 5,
+      "complete": true,
+      "fullyCorrectFormattingRate": 0.4267990074441687,
+      "confirmedLowerBound": 0.4267990074441687,
+      "possibleUpperBound": 0.4267990074441687
+    },
+    "rules": {
+      "eligible": 403,
+      "correct": 307,
+      "incorrect": 96,
+      "pending": 0,
+      "unclear": 0,
+      "excludedAmbiguous": 5,
+      "complete": true,
+      "fullyCorrectFormattingRate": 0.7617866004962779,
+      "confirmedLowerBound": 0.7617866004962779,
+      "possibleUpperBound": 0.7617866004962779
+    },
+    "anystyle": {
+      "eligible": 403,
+      "correct": 2,
+      "incorrect": 401,
+      "pending": 0,
+      "unclear": 0,
+      "excludedAmbiguous": 5,
+      "complete": true,
+      "fullyCorrectFormattingRate": 0.004962779156327543,
+      "confirmedLowerBound": 0.004962779156327543,
+      "possibleUpperBound": 0.004962779156327543
+    }
+  },
+  "llmUnsupportedFacts": {
+    "predictedFactFields": 3139,
+    "reviewed": 3139,
+    "pending": 0,
+    "unclear": 0,
+    "excludedAmbiguousFields": 6,
+    "confirmedUnsupported": 4,
+    "recordsWithConfirmedUnsupported": 4,
+    "available": true,
+    "complete": true,
+    "totalUnsupported": 4,
+    "unsupportedRate": 0.0012742911755336094,
+    "derivedCategories": 803,
+    "derivedCategoryErrors": 23,
+    "derivedCategoryPendingOrUnclear": 3
+  },
+  "sourceWorkbookSha256": "352bf01b0062caadd1fe89fdd665453d30e5f7d5010f8906d8c129bc1893dd78",
+  "procedure": "AI-prepared decisions; Mikhail Sayapin confirmation reported by dataset author; R086/R464 evidence clarified by Codex after confirmation. Not blind independent annotation."
+}

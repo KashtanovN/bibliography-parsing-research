@@ -2,7 +2,7 @@
 # Read-only terminal monitor. It never invokes models or edits experiment files.
 set -u
 task_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-task_run=${1:-"$task_root/research-runs/final-test-20261029"}
+task_run=${1:-"$task_root/research-runs/test-four-methods"}
 task_once=${2:-}
 if [[ "$task_once" != "" && "$task_once" != "--once" ]]; then
   printf 'Использование: bash scripts/watch-test-progress.sh ПАПКА [--once]\n' >&2
@@ -14,6 +14,16 @@ task_time() {
 }
 while :; do
   if [[ -t 1 && "$task_once" == "" ]]; then printf '\033[H\033[2J'; fi
+  task_methods=(rules grobid ollama anystyle)
+  if [[ -f "$task_run/run.json" ]]; then
+    task_selected=()
+    for task_candidate in "${task_methods[@]}"; do
+      if grep -Eq '^[[:space:]]*"'"$task_candidate"'"[[:space:]]*:' "$task_run/run.json"; then
+        task_selected+=("$task_candidate")
+      fi
+    done
+    if (( ${#task_selected[@]} > 0 )); then task_methods=("${task_selected[@]}"); fi
+  fi
   task_expected=408
   if [[ -f "$task_run/run.json" ]]; then
     task_found=$(sed -n 's/^[[:space:]]*"records"[[:space:]]*:[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$task_run/run.json" | head -n 1)
@@ -35,7 +45,7 @@ while :; do
   task_total=0
   task_llm_count=0
   task_llm_millis=0
-  for task_method in rules grobid ollama; do
+  for task_method in "${task_methods[@]}"; do
     task_count=0; task_errors=0; task_empty=0; task_millis=0
     if [[ -f "$task_run/$task_method.jsonl" ]]; then
       task_lines=$(wc -l < "$task_run/$task_method.jsonl")
@@ -55,19 +65,20 @@ while :; do
     case "$task_method" in
       rules) task_name=Rules ;;
       grobid) task_name=GROBID ;;
+      anystyle) task_name=AnyStyle ;;
       ollama) task_name=Qwen3-8B; task_llm_count=$task_count; task_llm_millis=$task_millis ;;
     esac
     task_percent=$(awk -v n="$task_count" -v d="$task_expected" 'BEGIN {printf "%.1f",100*n/d}')
     printf '%-12s %4d / %-4d %6s%% %6d %6d\n' "$task_name" "$task_count" "$task_expected" "$task_percent" "$task_errors" "$task_empty"
     task_total=$((task_total + task_count))
   done
-  printf '\nВсего завершено вызовов: %d / %d\n' "$task_total" "$((3 * task_expected))"
+  printf '\nВсего завершено вызовов: %d / %d\n' "$task_total" "$((${#task_methods[@]} * task_expected))"
   if [[ -f "$task_run.started" ]]; then
     task_started=$(cat "$task_run.started")
     task_elapsed=$(($(date +%s) - task_started))
     printf 'Прошло: '; task_time "$task_elapsed"; printf '\n'
   fi
-  if (( task_llm_count < task_expected )); then
+  if [[ " ${task_methods[*]} " == *" ollama "* ]] && (( task_llm_count < task_expected )); then
     if (( task_llm_count > 0 )); then
       task_eta=$(awk -v n="$task_llm_count" -v d="$task_expected" -v ms="$task_llm_millis" 'BEGIN {printf "%.0f",(d-n)*ms/(1000*n)}')
       printf 'Остаток Qwen по средней длительности завершённых вызовов: '

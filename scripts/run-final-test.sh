@@ -2,16 +2,27 @@
 # Execute the frozen experiment once and evaluate it without rebuilding the application.
 set -eu
 task_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-task_run=${1:-"$task_root/research-runs/final-test-20261029"}
-task_protocol="$task_root/research-runs/full-dev-20261028/frozen-protocol"
+if (( $# > 2 )); then
+  printf 'Использование: bash scripts/run-final-test.sh [НОВАЯ_ПАПКА_TEST] [ПАПКА_ПРОТОКОЛА]\n' >&2
+  exit 2
+fi
+task_run=${1:-"$task_root/research-runs/test-$(date -u '+%Y%m%dT%H%M%SZ')"}
+task_protocol=${2:-"$task_root/research-runs/dev-four-methods/frozen-protocol"}
+if [[ "$task_run" != /* ]]; then task_run="$PWD/$task_run"; fi
+if [[ "$task_protocol" != /* ]]; then task_protocol="$PWD/$task_protocol"; fi
 task_jar="$task_protocol/application.jar"
 task_dataset="$task_root/датасет.xlsx"
 if [[ -e "$task_run" || -e "$task_run.pipeline-status" ]]; then
   printf 'Папка или состояние запуска уже существуют: %s\nПовторный запуск автоматически не выполняется.\n' "$task_run" >&2
   exit 2
 fi
-test -f "$task_jar"
+if [[ ! -f "$task_jar" ]]; then
+  printf 'Нет зафиксированного JAR: %s\nСначала выполните полный DEV и зафиксируйте его протокол.\n' "$task_jar" >&2
+  exit 2
+fi
 mkdir -p "$(dirname "$task_run")"
+# AnyStyle's default bridge is relative to backend, as in the documented Java commands.
+cd "$task_root/backend"
 task_child=''
 task_sleep_guard=''
 task_set_state() {

@@ -1,4 +1,4 @@
-# Три метода разбора ссылок
+# Четыре метода разбора ссылок
 
 Реализованы `rules`, `grobid`, `ollama`, `anystyle` и общий запуск `all` четырёх методов. Это стадия извлечения реквизитов. Для расчёта F1 сохранённых ответов используйте [оценщик](EVALUATION.md), для единообразного оформления — [общий форматтер](FORMATTING.md). Файлы предсказаний сами по себе не являются готовой таблицей качества для статьи.
 
@@ -60,7 +60,7 @@ java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx -
 
 ## Общий прогон
 
-После запуска обоих сервисов из `backend`:
+После запуска GROBID и Ollama и [установки AnyStyle](ANYSTYLE.md) из `backend`:
 
 ```sh
 java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx --method=all --split=dev --limit=3
@@ -69,9 +69,9 @@ java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx -
 `--split` по умолчанию `dev`. Без `--limit` читается вся выбранная часть. `test` выбирается только явно и требует зафиксированного [протокола](EXPERIMENTS.md), всех четырёх методов и полного набора. После фиксации методов запускайте архивированный JAR:
 
 ```sh
-java -jar ../research-runs/full-dev-20261028/frozen-protocol/application.jar \
+java -jar ../research-runs/dev-four-methods/frozen-protocol/application.jar \
   --parse-dataset=../датасет.xlsx --method=all --split=test \
-  --protocol=../research-runs/full-dev-20261028/frozen-protocol
+  --protocol=../research-runs/dev-four-methods/frozen-protocol
 ```
 
 Дополнительные параметры: `--grobid-url=http://127.0.0.1:8070`, `--ollama-url=http://127.0.0.1:11434`, `--model=qwen3:8b`, `--timeout-seconds=180`. Внешние сервисы не подставляются автоматически. Включайте только доступные методы: `rules` работает самостоятельно, без Docker/Ollama и PostgreSQL.
@@ -79,7 +79,7 @@ java -jar ../research-runs/full-dev-20261028/frozen-protocol/application.jar \
 ## Сохранённые данные
 
 - `run.json`: SHA-256 Excel, часть набора, объём, состояние/время запуска, среда Java/ОС, контрольные суммы реализации, параметры запуска, настройки методов, промпт и полученные версии сервисов. TEST содержит связь с копией фиксированного протокола.
-- `rules.jsonl`, `grobid.jsonl`, `ollama.jsonl`: по одной записи на исходную ссылку; ID, метод, исходный текст, предсказанные поля, предупреждения или ошибка, исходный ответ сервиса, время начала/окончания и длительность. Эталонных ответов в этих файлах нет.
+- `rules.jsonl`, `grobid.jsonl`, `ollama.jsonl`, `anystyle.jsonl`: по одной записи на исходную ссылку; ID, метод, исходный текст, предсказанные поля, предупреждения или ошибка, исходный ответ сервиса, время начала/окончания и длительность. Эталонных ответов в этих файлах нет.
 - `summary.json`: число `SUCCESS`, `EMPTY`, `ERROR` по каждому методу. `SUCCESS` означает технически успешный ответ, а не правильную ссылку.
 
 После `--evaluate-run` создаётся полный журнал `evaluation/records.jsonl` с результатом сравнения каждой ссылки, а не только список ошибок. Подробности — [сохранение экспериментов](EXPERIMENTS.md).
@@ -92,10 +92,10 @@ java -jar ../research-runs/full-dev-20261028/frozen-protocol/application.jar \
 
 `rules-v1` — фиксированный эвристический базовый метод: явные маркеры DOI/ISBN/EDN, URL/дата обращения, авторы с инициалами, границы `//`, год, том/номер/страницы, ограниченный словарь мест издания. Он может ошибаться на сложных форматах, нормативных документах и необычных именах; его предупреждение не является гарантией полноты. Исходная строка в журнале остаётся неизменной, хотя при извлечении пробелы объединяются. Никаких правил по ID записей или обращения к эталону нет.
 
-Тестовые HTTP-серверы проверяют интеграцию, а не качество настоящих GROBID/Qwen. До статьи нужен реальный прогон на зафиксированных версиях сервисов и отдельный расчёт метрик.
+Тестовые HTTP-серверы проверяют интеграцию, а не качество настоящих GROBID/Qwen. Результаты реальных запусков опубликованы в [архивах TEST](../results/README.md).
 
 Первичные документы: [GROBID API](https://grobid.readthedocs.io/en/latest/Grobid-service/), [Docker](https://grobid.readthedocs.io/en/latest/Grobid-docker/), [Ollama chat](https://docs.ollama.com/api/chat), [JSON schema](https://docs.ollama.com/capabilities/structured-outputs), [Qwen3:8b](https://ollama.com/library/qwen3:8b).
 
-## Дополнительный AnyStyle
+## AnyStyle
 
 `--method=all` запускает все четыре метода; для проверки только AnyStyle доступен `--method=anystyle`. Установка и отображение полей описаны в [ANYSTYLE.md](ANYSTYLE.md). В архивных JAR значение `all` соответствует набору методов зафиксированного эксперимента; опубликованные замеры повторно не запускаются.
