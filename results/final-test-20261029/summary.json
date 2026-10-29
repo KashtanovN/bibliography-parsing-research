@@ -1,0 +1,15 @@
+{
+  "records" : 408,
+  "statuses" : {
+    "rules" : {
+      "SUCCESS" : 408
+    },
+    "grobid" : {
+      "SUCCESS" : 408
+    },
+    "ollama" : {
+      "SUCCESS" : 408
+    }
+  },
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/final-test-20261029"
+}
