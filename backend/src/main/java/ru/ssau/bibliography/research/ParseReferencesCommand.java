@@ -248,10 +248,13 @@ public final class ParseReferencesCommand {
               new OllamaCitationParser(
                   URI.create(options.getOrDefault("ollama-url", "http://127.0.0.1:11434")),
                   options.getOrDefault("model", "qwen3:8b"),
+                  timeout),
+              new AnyStyleCitationParser(
+                  Path.of(options.getOrDefault("anystyle-command", "../scripts/anystyle-worker.sh")),
                   timeout));
       default ->
           throw new IllegalArgumentException(
-              "--method должен быть rules, grobid, ollama, anystyle или all (три исходных метода)");
+              "--method должен быть rules, grobid, ollama, anystyle или all (все четыре метода)");
     };
   }
 }

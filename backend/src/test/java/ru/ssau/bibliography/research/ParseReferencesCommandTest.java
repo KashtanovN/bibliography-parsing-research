@@ -52,7 +52,7 @@ class ParseReferencesCommandTest {
   }
 
   @Test
-  void runsAllThreeAgainstTestHttpServices() throws Exception {
+  void runsAllFourAgainstTestHttpServices() throws Exception {
     HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
     try {
       serve(server, "/api/version", 200, "{\"version\":\"test-server\"}");
@@ -77,6 +77,15 @@ class ParseReferencesCommandTest {
               Map.of("done", true, "message", Map.of("content", JSON.writeValueAsString(fields)))));
       server.start();
       String url = "http://127.0.0.1:" + server.getAddress().getPort();
+      Path worker = directory.resolve("any-worker.sh");
+      Files.writeString(worker, """
+#!/bin/sh
+printf '%s\\n' '{"protocol":"anystyle-jsonl-v1","version":"fake","modelSha256":"%s","workerSha256":"%s","assetsSha256":{"test":"abc"}}'
+while IFS= read -r request; do
+  printf '%%s\\n' '{"result":[{"title":["Книга"],"type":"book"}]}'
+done
+""".formatted("%s", "a".repeat(64), "b".repeat(64)));
+      assertTrue(worker.toFile().setExecutable(true));
       Path output = directory.resolve("all");
       assertEquals(
           0,
@@ -84,11 +93,12 @@ class ParseReferencesCommandTest {
               new String[] {
                 "--parse-text=Иванов И.И. Книга. — М.: Издательство, 2020.",
                 "--method=all",
+                "--anystyle-command=" + worker,
                 "--grobid-url=" + url,
                 "--ollama-url=" + url,
                 "--output=" + output
               }));
-      for (String name : List.of("rules", "grobid", "ollama")) {
+      for (String name : List.of("rules", "grobid", "ollama", "anystyle")) {
         var result = JSON.readTree(Files.readString(output.resolve(name + ".jsonl")));
         assertEquals("SUCCESS", result.path("status").asText());
       }

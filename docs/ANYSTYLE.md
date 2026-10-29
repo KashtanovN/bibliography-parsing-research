@@ -52,7 +52,7 @@ java -jar ../research-runs/НОВЫЙ-ANYSTYLE-DEV/frozen-protocol/application.j
   --quality-run=../research-runs/НОВЫЙ-ANYSTYLE-TEST --dataset=../датасет.xlsx
 ```
 
-`--anystyle-command` выбирает другой исполняемый мостик вместо `../scripts/anystyle-worker.sh`. Команда передаётся в ProcessBuilder без shell-интерполяции. `--method=all` сохраняет прежний смысл: три исходных метода. Это предотвращает повторный вызов Qwen ради добавления AnyStyle.
+`--anystyle-command` выбирает другой исполняемый мостик вместо `../scripts/anystyle-worker.sh`. Команда передаётся в ProcessBuilder без shell-интерполяции. `--method=all` запускает все четыре метода вместе. `--method=anystyle` позволяет проверить один метод. Для нового общего эксперимента сначала выполните полный DEV с `--method=all`, зафиксируйте протокол и только затем запускайте TEST с тем же параметром. Архивные JAR сохраняют поведение своего эксперимента.
 
 ## Объединение сравнения
 

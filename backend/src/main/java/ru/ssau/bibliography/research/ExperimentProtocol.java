@@ -16,7 +16,8 @@ public final class ExperimentProtocol {
           .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
           .enable(com.fasterxml.jackson.core.JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
   static final String VERSION = "experiment-protocol-v1";
-  private static final Set<String> ALL = Set.of("rules", "grobid", "ollama");
+  private static final Set<String> LEGACY = Set.of("rules", "grobid", "ollama");
+  private static final Set<String> ALL = Set.of("rules", "grobid", "ollama", "anystyle");
 
   private ExperimentProtocol() {}
 
@@ -45,9 +46,10 @@ public final class ExperimentProtocol {
     if (saved.split() != ResearchDataset.Split.DEV
         || saved.references().size() != saved.dataset().references(ResearchDataset.Split.DEV).size()
         || !(saved.predictions().keySet().equals(ALL)
+            || saved.predictions().keySet().equals(LEGACY)
             || saved.predictions().keySet().equals(Set.of("anystyle"))))
       throw new IllegalArgumentException(
-          "Нужен полный DEV-прогон трёх методов либо отдельного AnyStyle");
+          "Нужен полный DEV-прогон четырёх методов (либо архивных трёх или одного AnyStyle)");
     if (!Files.isRegularFile(run.resolve("summary.json")))
       throw new IllegalArgumentException("DEV-прогон не завершён: нет summary.json");
     if (!saved.manifest().path("setupWarnings").isArray()
@@ -64,7 +66,7 @@ public final class ExperimentProtocol {
     if (timeout < 1) throw new IllegalArgumentException("Тайм-аут должен быть положительным");
     Duration duration = Duration.ofSeconds(timeout);
     boolean supplemental = saved.predictions().keySet().equals(Set.of("anystyle"));
-    List<CitationParser> current =
+    List<CitationParser> current = new ArrayList<>(
         supplemental
             ? List.of(
                 new AnyStyleCitationParser(
@@ -76,7 +78,10 @@ public final class ExperimentProtocol {
                 new OllamaCitationParser(
                     URI.create(methods.path("ollama").path("endpoint").asText()),
                     methods.path("ollama").path("model").asText(),
-                    duration));
+                    duration)));
+    if (!supplemental && methods.has("anystyle"))
+      current.add(new AnyStyleCitationParser(
+          Path.of(methods.path("anystyle").path("command").asText()), duration));
     for (var parser : current) {
       if (parser instanceof AnyStyleCitationParser anystyle) {
         try (anystyle) {
@@ -201,7 +206,7 @@ public final class ExperimentProtocol {
   private static void requireMetadata(JsonNode methods) {
     Set<String> names = new HashSet<>();
     methods.fieldNames().forEachRemaining(names::add);
-    if (methods.isObject() && names.equals(Set.of("anystyle"))) {
+    if (methods.isObject() && names.contains("anystyle")) {
       JsonNode runtime = methods.path("anystyle").path("runtime");
       if (!runtime.path("modelSha256").asText().matches("[a-f0-9]{64}")
           || !runtime.path("workerSha256").asText().matches("[a-f0-9]{64}")
@@ -209,15 +214,15 @@ public final class ExperimentProtocol {
           || !runtime.path("assetsSha256").isObject()
           || runtime.path("assetsSha256").isEmpty())
         throw new IllegalArgumentException("Нужны подтверждённые версии и модель AnyStyle");
-      return;
+      if (names.equals(Set.of("anystyle"))) return;
     }
     if (!methods.isObject()
-        || !names.equals(ALL)
+        || !(names.equals(ALL) || names.equals(LEGACY))
         || methods.path("grobid").path("serverVersion").asText().isBlank()
         || methods.path("ollama").path("modelDigest").asText().isBlank()
         || methods.path("ollama").path("ollamaVersion").asText().isBlank())
       throw new IllegalArgumentException(
-          "Нужны три метода и подтверждённые версии GROBID/Ollama/модели");
+          "Нужен полный набор методов и подтверждённые версии GROBID/Ollama/модели");
   }
 
   private static ObjectNode withoutEndpoints(JsonNode methods) {

@@ -153,8 +153,9 @@ class ExperimentProtocolTest {
       assertThrows(IllegalArgumentException.class, () -> ParseReferencesCommand.run(args));
   }
 
-  @Test
-  void supplementalAnyStyleFreezesSeparatelyAndUsesTheSameEvaluationAndContexts() throws Exception {
+  @org.junit.jupiter.params.ParameterizedTest
+  @org.junit.jupiter.params.provider.ValueSource(booleans = {false, true})
+  void anyStyleFreezesAloneOrWithAllMethods(boolean combined) throws Exception {
     Path worker = temporary.resolve("fake-worker.sh");
     Files.writeString(
         worker,
@@ -177,9 +178,21 @@ done
               "--anystyle-command=" + worker,
               "--output=" + dev
             }));
+    if (combined) {
+      Path full = fixture();
+      ObjectNode manifest = (ObjectNode) json.readTree(full.resolve("run.json").toFile());
+      JsonNode any = json.readTree(dev.resolve("run.json").toFile()).path("methods").path("anystyle");
+      ((ObjectNode) manifest.path("methods")).set("anystyle", any);
+      json.writeValue(full.resolve("run.json").toFile(), manifest);
+      Files.copy(dev.resolve("anystyle.jsonl"), full.resolve("anystyle.jsonl"));
+      dev = full;
+    }
     Path directory = freeze(dev);
     JsonNode protocol = ExperimentProtocol.read(directory);
-    assertTrue(protocol.path("scope").asText().contains("Supplemental"));
+    assertEquals(!combined, protocol.has("scope"));
+    assertEquals(combined ? 4 : 1, protocol.path("methods").size());
+    assertDoesNotThrow(() -> ExperimentProtocol.validate(
+        protocol, protocol.path("datasetSha256").asText(), protocol.path("methods"), 408, 180));
     assertTrue(protocol.path("methods").has("anystyle"));
     var changed = ((ObjectNode) protocol.path("methods")).deepCopy();
     ((ObjectNode) changed.path("anystyle").path("runtime")).put("modelSha256", "c".repeat(64));
@@ -188,6 +201,13 @@ done
         () ->
             ExperimentProtocol.validate(
                 protocol, protocol.path("datasetSha256").asText(), changed, 408, 180));
+    if (combined) {
+      var missing = ((ObjectNode) protocol.path("methods")).deepCopy();
+      missing.remove("anystyle");
+      assertThrows(IllegalArgumentException.class, () -> ExperimentProtocol.validate(
+          protocol, protocol.path("datasetSha256").asText(), missing, 408, 180));
+      return;
+    }
     Path test = temporary.resolve("any-test");
     assertEquals(
         0,
@@ -212,13 +232,14 @@ done
         json.readTree(test.resolve("quality/quality_metrics.json").toFile())
             .path("llmIncluded")
             .asBoolean());
+    final Path completedDev = dev;
     Files.writeString(worker, "#!/bin/sh\nexit 1\n");
     assertThrows(
         java.io.IOException.class,
         () ->
             ExperimentProtocol.run(
                 new String[] {
-                  "--freeze-experiment=" + dev,
+                  "--freeze-experiment=" + completedDev,
                   "--dataset=../датасет.xlsx",
                   "--protocol-output=" + temporary.resolve("changed")
                 }));
