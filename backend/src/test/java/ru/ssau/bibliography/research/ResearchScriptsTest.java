@@ -83,6 +83,27 @@ exit 0
   }
 
   @Test
+  void redirectedMonitorDoesNotRepeatFramesAndIgnoresIncompleteTrailingRecord() throws Exception {
+    Path run = temporary.resolve("partial");
+    Files.createDirectories(run);
+    json.writerWithDefaultPrettyPrinter().writeValue(run.resolve("run.json").toFile(),
+        Map.of("records", 2, "split", "dev", "methods", Map.of("ollama", Map.of())));
+    Files.writeString(run.resolve("ollama.jsonl"),
+        "{\"status\":\"SUCCESS\",\"durationMillis\":50}\n{\"status\":\"ERROR\"");
+    var p = new ProcessBuilder("bash", root.resolve("scripts/watch-test-progress.sh").toString(),
+        run.toString()).redirectErrorStream(true).start();
+    if (!p.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)) {
+      p.destroyForcibly();
+      fail("Redirected monitor must terminate after a single snapshot");
+    }
+    String output = new String(p.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+    assertEquals(0, p.exitValue(), output);
+    assertTrue(output.contains("Всего завершено вызовов: 1 / 2"), output);
+    assertEquals(1, output.split("ЗАМЕРЫ / DEV", -1).length - 1, output);
+    assertFalse(output.contains("\u001b"), output);
+  }
+
+  @Test
   void devPipelineUsesAllMethodsWithoutTestLimitOrAutomaticFreeze() throws Exception {
     Path project = temporary.resolve("project with spaces");
     Files.createDirectories(project.resolve("scripts"));

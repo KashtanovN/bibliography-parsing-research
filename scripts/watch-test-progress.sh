@@ -2,18 +2,42 @@
 # Read-only terminal monitor. It never invokes models or edits experiment files.
 set -u
 task_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-task_run=${1:-"$task_root/research-runs/test-four-methods"}
+task_requested=${1:-}
+task_run=${1:-"$task_root/research-runs/dev-four-methods"}
 task_once=${2:-}
+if [[ "$task_requested" == --once ]]; then task_requested=''; task_once=--once; fi
 if [[ "$task_once" != "" && "$task_once" != "--once" ]]; then
   printf 'Использование: bash scripts/watch-test-progress.sh ПАПКА [--once]\n' >&2
   exit 2
 fi
+task_live=0
+if [[ -t 1 && "${TERM:-dumb}" != dumb && "$task_once" != --once ]]; then
+  task_live=1
+else
+  # IDE panels and redirected output receive one snapshot, never endless logs.
+  task_once=--once
+fi
+task_frame=''
+task_cleanup() {
+  if (( task_live )); then
+    printf '\033[?25h\033[?1049l'
+    if [[ -n "$task_frame" ]]; then printf '%s\n' "$task_frame"; fi
+  fi
+}
+trap task_cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+if (( task_live )); then printf '\033[?1049h\033[?25l'; fi
 task_time() {
   local seconds=$1
   printf '%02d:%02d:%02d' "$((seconds / 3600))" "$(((seconds % 3600) / 60))" "$((seconds % 60))"
 }
 while :; do
-  if [[ -t 1 && "$task_once" == "" ]]; then printf '\033[H\033[2J'; fi
+  if [[ -z "$task_requested" ]]; then
+    if [[ -f "$task_root/research-runs/test-four-methods.pipeline-status" || -f "$task_root/research-runs/test-four-methods/run.json" ]]; then
+      task_run="$task_root/research-runs/test-four-methods"
+    else task_run="$task_root/research-runs/dev-four-methods"; fi
+  fi
   task_methods=(rules grobid ollama anystyle)
   if [[ -f "$task_run/run.json" ]]; then
     task_selected=()
@@ -24,10 +48,13 @@ while :; do
     done
     if (( ${#task_selected[@]} > 0 )); then task_methods=("${task_selected[@]}"); fi
   fi
-  task_expected=408
+  task_split=DEV; task_expected=92
+  if [[ "$task_run" == *test* ]]; then task_split=TEST; task_expected=408; fi
   if [[ -f "$task_run/run.json" ]]; then
     task_found=$(sed -n 's/^[[:space:]]*"records"[[:space:]]*:[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$task_run/run.json" | head -n 1)
     if [[ "$task_found" =~ ^[1-9][0-9]*$ ]]; then task_expected=$task_found; fi
+    task_found=$(sed -n 's/^[[:space:]]*"split"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$task_run/run.json" | head -n 1)
+    case "$task_found" in dev) task_split=DEV;; test) task_split=TEST;; esac
   fi
   task_state=WAITING
   if [[ -f "$task_run.pipeline-status" ]]; then
@@ -39,10 +66,25 @@ while :; do
     task_pid=$(cat "$task_run.pipeline.pid")
     if [[ "$task_pid" =~ ^[0-9]+$ ]] && ! kill -0 "$task_pid" 2>/dev/null; then task_state=STOPPED; fi
   fi
-  printf 'Прогресс эксперимента    %s\n' "$(TZ=Europe/Samara date '+%d.%m.%Y %H:%M:%S')"
-  printf 'Папка: %s\nСостояние: %s\n\n' "$task_run" "$task_state"
+  case "$task_state" in
+    WAITING) task_stage='Ожидание запуска';;
+    RUNNING) task_stage='1. Разбор ссылок';;
+    EVALUATING) task_stage='2. Расчёт precision / recall / F1';;
+    FORMATTING) task_stage='3. Оформление по профилям ГОСТ';;
+    PREPARING_REVIEW) task_stage='4. Подготовка бланка предметной проверки';;
+    COMPLETED) task_stage='Завершено';;
+    EXTRACTION_COMPLETED) task_stage='Извлечение завершено';;
+    FAILED) task_stage='Ошибка запуска или этапа';;
+    CANCELLED) task_stage='Запуск отменён';;
+    STOPPED) task_stage='Процесс больше не работает';;
+    *) task_stage=$task_state;;
+  esac
+  task_draw() {
+  printf 'ЗАМЕРЫ / %s    %s\n' "$task_split" "$(TZ=Europe/Samara date '+%d.%m.%Y %H:%M:%S')"
+  printf 'Этап: %s\n\n' "$task_stage"
   printf 'Метод        Обработано      Готово   ERROR  EMPTY\n'
   task_total=0
+  task_active=0
   task_llm_count=0
   task_llm_millis=0
   for task_method in "${task_methods[@]}"; do
@@ -69,7 +111,9 @@ while :; do
       ollama) task_name=Qwen3-8B; task_llm_count=$task_count; task_llm_millis=$task_millis ;;
     esac
     task_percent=$(awk -v n="$task_count" -v d="$task_expected" 'BEGIN {printf "%.1f",100*n/d}')
-    printf '%-12s %4d / %-4d %6s%% %6d %6d\n' "$task_name" "$task_count" "$task_expected" "$task_percent" "$task_errors" "$task_empty"
+    task_mark=' '
+    if [[ "$task_state" == RUNNING ]] && (( task_count < task_expected && task_active == 0 )); then task_mark='>'; task_active=1; fi
+    printf '%s %-10s %4d / %-4d %6s%% %6d %6d\n' "$task_mark" "$task_name" "$task_count" "$task_expected" "$task_percent" "$task_errors" "$task_empty"
     task_total=$((task_total + task_count))
   done
   printf '\nВсего завершено вызовов: %d / %d\n' "$task_total" "$((${#task_methods[@]} * task_expected))"
@@ -79,28 +123,32 @@ while :; do
     printf 'Прошло: '; task_time "$task_elapsed"; printf '\n'
   fi
   if [[ " ${task_methods[*]} " == *" ollama "* ]] && (( task_llm_count < task_expected )); then
-    if (( task_llm_count > 0 )); then
+    if (( task_llm_count >= 3 )); then
       task_eta=$(awk -v n="$task_llm_count" -v d="$task_expected" -v ms="$task_llm_millis" 'BEGIN {printf "%.0f",(d-n)*ms/(1000*n)}')
       printf 'Остаток Qwen по средней длительности завершённых вызовов: '
+      task_time "$task_eta"; printf '\n'
     else
-      task_eta=$(((task_expected - task_llm_count) * 33))
-      printf 'Ориентир для Qwen по DEV: '
+      printf 'Остаток Qwen: оценка появится после первых трёх ответов.\n'
     fi
-    task_time "$task_eta"; printf '\n'
   fi
   printf '\nERROR — технические ошибки, не ошибки извлечения полей.\n'
   printf 'Процент показывает долю завершённых вызовов, а не долю времени.\n'
+  printf '> — выполняемый метод. Обновление каждые 2 с.\n'
+  printf 'Ctrl+C закрывает только монитор; замеры продолжат работу.\n'
+  printf '\nПапка: %s\n' "$task_run"
   if [[ "$task_state" == "COMPLETED" ]]; then
-    printf '\nГотово. Общий отчёт: %s/quality/report.md\n' "$task_run"
-    break
+    if [[ -f "$task_run/quality/report.md" ]]; then printf 'Отчёт: %s/quality/report.md\n' "$task_run"
+    else printf 'Отчёт: %s/evaluation/report.md\n' "$task_run"; fi
+    if [[ "$task_split" == DEV ]]; then printf 'Далее: анализ DEV и фиксация протокола перед TEST.\n'; fi
   elif [[ "$task_state" == "FAILED" || "$task_state" == "CANCELLED" || "$task_state" == "STOPPED" ]]; then
     printf '\nЗапуск остановлен. Журнал: %s.pipeline.log\n' "$task_run"
-    break
   elif [[ "$task_state" == "EXTRACTION_COMPLETED" ]]; then
     printf '\nИзвлечение завершено.\n'
-    break
   fi
+  }
+  task_frame=$(task_draw)
+  if (( task_live )); then printf '\033[H%s\033[J' "$task_frame"; else printf '%s\n' "$task_frame"; fi
+  case "$task_state" in COMPLETED|FAILED|CANCELLED|STOPPED|EXTRACTION_COMPLETED) break;; esac
   if [[ "$task_once" == "--once" ]]; then break; fi
-  printf '\nCtrl+C закрывает только монитор. Фоновый TEST продолжит работу.\n'
-  sleep 5
+  sleep 2
 done
