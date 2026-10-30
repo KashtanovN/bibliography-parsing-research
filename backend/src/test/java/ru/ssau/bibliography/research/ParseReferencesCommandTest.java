@@ -26,7 +26,7 @@ class ParseReferencesCommandTest {
             }));
     var meta = JSON.readTree(output.resolve("run.json").toFile());
     assertEquals("dev", meta.path("split").asText());
-    assertEquals(92, meta.path("splitSize").asInt());
+    assertEquals(90, meta.path("splitSize").asInt());
     assertEquals(64, meta.path("datasetSha256").asText().length());
     assertEquals("COMPLETED", meta.path("executionState").asText());
     assertEquals(180, meta.path("timeoutSeconds").asInt());

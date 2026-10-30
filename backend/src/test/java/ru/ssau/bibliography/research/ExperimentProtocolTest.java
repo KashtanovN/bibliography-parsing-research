@@ -61,14 +61,14 @@ class ExperimentProtocolTest {
   void freezeRetainsPoliciesVersionsAndAcceptsOnlyMatchingImplementation() throws Exception {
     Path dev = fixture(), directory = freeze(dev);
     JsonNode p = ExperimentProtocol.read(directory);
-    assertEquals(92, p.path("devRecords").asInt());
-    assertEquals(408, p.path("testRecords").asInt());
+    assertEquals(90, p.path("devRecords").asInt());
+    assertEquals(400, p.path("testRecords").asInt());
     assertFalse(p.path("implementation").isEmpty());
     assertTrue(p.path("methods").path("ollama").has("systemPrompt"));
     assertDoesNotThrow(
         () ->
             ExperimentProtocol.validate(
-                p, p.path("datasetSha256").asText(), p.get("methods"), 408, 180));
+                p, p.path("datasetSha256").asText(), p.get("methods"), 400, 180));
     assertThrows(
         FileAlreadyExistsException.class,
         () ->
@@ -94,11 +94,11 @@ class ExperimentProtocolTest {
       assertThrows(
           IllegalArgumentException.class,
           () ->
-              ExperimentProtocol.validate(p, p.path("datasetSha256").asText(), methods, 408, 180));
+              ExperimentProtocol.validate(p, p.path("datasetSha256").asText(), methods, 400, 180));
     }
     assertThrows(
         IllegalArgumentException.class,
-        () -> ExperimentProtocol.validate(p, "changed", p.get("methods"), 408, 180));
+        () -> ExperimentProtocol.validate(p, "changed", p.get("methods"), 400, 180));
     assertThrows(
         IllegalArgumentException.class,
         () ->
@@ -108,14 +108,14 @@ class ExperimentProtocolTest {
         IllegalArgumentException.class,
         () ->
             ExperimentProtocol.validate(
-                p, p.path("datasetSha256").asText(), p.get("methods"), 408, 60));
+                p, p.path("datasetSha256").asText(), p.get("methods"), 400, 60));
     ObjectNode changed = ((ObjectNode) p).deepCopy();
     ((ObjectNode) changed.get("implementation")).put("fake.class", "changed");
     assertThrows(
         IllegalArgumentException.class,
         () ->
             ExperimentProtocol.validate(
-                changed, p.path("datasetSha256").asText(), p.get("methods"), 408, 180));
+                changed, p.path("datasetSha256").asText(), p.get("methods"), 400, 180));
   }
 
   @Test
@@ -192,7 +192,7 @@ done
     assertEquals(!combined, protocol.has("scope"));
     assertEquals(combined ? 4 : 1, protocol.path("methods").size());
     assertDoesNotThrow(() -> ExperimentProtocol.validate(
-        protocol, protocol.path("datasetSha256").asText(), protocol.path("methods"), 408, 180));
+        protocol, protocol.path("datasetSha256").asText(), protocol.path("methods"), 400, 180));
     assertTrue(protocol.path("methods").has("anystyle"));
     var changed = ((ObjectNode) protocol.path("methods")).deepCopy();
     ((ObjectNode) changed.path("anystyle").path("runtime")).put("modelSha256", "c".repeat(64));
@@ -200,12 +200,12 @@ done
         IllegalArgumentException.class,
         () ->
             ExperimentProtocol.validate(
-                protocol, protocol.path("datasetSha256").asText(), changed, 408, 180));
+                protocol, protocol.path("datasetSha256").asText(), changed, 400, 180));
     if (combined) {
       var missing = ((ObjectNode) protocol.path("methods")).deepCopy();
       missing.remove("anystyle");
       assertThrows(IllegalArgumentException.class, () -> ExperimentProtocol.validate(
-          protocol, protocol.path("datasetSha256").asText(), missing, 408, 180));
+          protocol, protocol.path("datasetSha256").asText(), missing, 400, 180));
       return;
     }
     Path test = temporary.resolve("any-test");
@@ -221,12 +221,12 @@ done
               "--output=" + test
             }));
     var saved = SavedResearchRun.read(test, Path.of("../Dataset.xlsx"));
-    assertEquals(408, saved.predictions().get("anystyle").size());
+    assertEquals(400, saved.predictions().get("anystyle").size());
     EvaluateRunCommand.run(new String[] {"--evaluate-run=" + test, "--dataset=../Dataset.xlsx"});
     FormatRunCommand.run(new String[] {"--format-run=" + test, "--dataset=../Dataset.xlsx"});
     QualityReviewCommand.run(new String[] {"--quality-run=" + test, "--dataset=../Dataset.xlsx"});
     assertEquals(
-        408,
+        400,
         json.readTree(test.resolve("formatting/formatting.json").toFile()).path("records").asInt());
     assertFalse(
         json.readTree(test.resolve("quality/quality_metrics.json").toFile())

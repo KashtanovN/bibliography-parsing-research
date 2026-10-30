@@ -98,4 +98,4 @@ java -jar ../research-runs/dev-four-methods/frozen-protocol/application.jar \
 
 ## AnyStyle
 
-`--method=all` запускает все четыре метода; для проверки только AnyStyle доступен `--method=anystyle`. Установка и отображение полей описаны в [ANYSTYLE.md](ANYSTYLE.md). Для нового опыта все четыре метода запускаются одним полным DEV и одним TEST. Старые архивы убраны из текущей версии.
+`--method=all` запускает все четыре метода; для проверки только AnyStyle доступен `--method=anystyle`. Установка и отображение полей описаны в [ANYSTYLE.md](ANYSTYLE.md). Все четыре метода запускаются одним полным DEV и одним TEST через `scripts/run-experiment.sh`.

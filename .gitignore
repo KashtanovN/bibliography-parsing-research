@@ -7,3 +7,4 @@ backend/target/
 .idea/
 *.iml
 research-runs/
+__pycache__/

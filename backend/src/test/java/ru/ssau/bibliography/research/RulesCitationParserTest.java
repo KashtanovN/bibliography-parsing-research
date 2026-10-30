@@ -81,7 +81,7 @@ class RulesCitationParserTest {
 
   @Test
   void keepsBalancedParenthesesInDoiAndDoesNotInventTypeFromId() {
-    var a = parser.parse(new ResearchDataset.ParserInput("R103", "Статья DOI: 10.1000/a(2020)."));
+    var a = parser.parse(new ResearchDataset.ParserInput("fixture-citation", "Статья DOI: 10.1000/a(2020)."));
     var b = parser.parse(new ResearchDataset.ParserInput("other", "Статья DOI: 10.1000/a(2020)."));
     assertEquals(a.fields(), b.fields());
     assertEquals("10.1000/a(2020)", a.fields().get(ReferenceField.DOI));

@@ -84,7 +84,7 @@ class EvaluateRunCommandTest {
   }
 
   @Test
-  void allRecordsRetainErrorsWrongValuesAndAmbiguityWithoutDroppingRows() throws Exception {
+  void allRecordsRetainErrorsAndWrongValuesWithoutDroppingRows() throws Exception {
     Path run = temporary.resolve("full");
     ParseReferencesCommand.run(new String[] {"--parse-dataset=../Dataset.xlsx", "--output=" + run});
     var lines = Files.readAllLines(run.resolve("rules.jsonl"));
@@ -99,7 +99,7 @@ class EvaluateRunCommandTest {
     Files.write(run.resolve("rules.jsonl"), lines);
     EvaluateRunCommand.run(new String[] {"--evaluate-run=" + run, "--dataset=../Dataset.xlsx"});
     var rows = Files.readAllLines(run.resolve("evaluation/records.jsonl"));
-    assertEquals(92, rows.size());
+    assertEquals(90, rows.size());
     JsonNode error = json.readTree(rows.get(0));
     assertEquals("synthetic test failure", error.path("error").asText());
     assertFalse(error.path("fullyCorrect").asBoolean());
@@ -107,22 +107,9 @@ class EvaluateRunCommandTest {
     assertEquals(
         "WRONG",
         json.readTree(rows.get(1)).path("fieldResults").path("YEAR").path("outcome").asText());
-    JsonNode ambiguous =
-        rows.stream()
-            .map(
-                row -> {
-                  try {
-                    return json.readTree(row);
-                  } catch (Exception e) {
-                    throw new RuntimeException(e);
-                  }
-                })
-            .filter(row -> row.path("id").asText().equals("R375"))
-            .findFirst()
-            .orElseThrow();
-    assertTrue(ambiguous.path("fullyCorrect").isNull());
-    assertEquals(
-        "EXCLUDED_AMBIGUOUS",
-        ambiguous.path("fieldResults").path("PAGE_MEANING").path("outcome").asText());
+    for (String row : rows) {
+      assertTrue(json.readTree(row).path("fullyCorrectEligible").asBoolean());
+      assertFalse(json.readTree(row).path("fullyCorrect").isNull());
+    }
   }
 }

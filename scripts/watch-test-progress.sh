@@ -48,8 +48,8 @@ while :; do
     done
     if (( ${#task_selected[@]} > 0 )); then task_methods=("${task_selected[@]}"); fi
   fi
-  task_split=DEV; task_expected=92
-  if [[ "$task_run" == *test* ]]; then task_split=TEST; task_expected=408; fi
+  task_split=DEV; task_expected=90
+  if [[ "$task_run" == *test* ]]; then task_split=TEST; task_expected=400; fi
   if [[ -f "$task_run/run.json" ]]; then
     task_found=$(sed -n 's/^[[:space:]]*"records"[[:space:]]*:[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$task_run/run.json" | head -n 1)
     if [[ "$task_found" =~ ^[1-9][0-9]*$ ]]; then task_expected=$task_found; fi

@@ -21,32 +21,14 @@ class ExcelDatasetLoaderTest {
     Path path = Path.of("..", "Dataset.xlsx");
     byte[] original = Files.readAllBytes(path);
     ResearchDataset dataset = loader.load(path);
-    assertEquals(500, dataset.references().size());
-    assertEquals(92, dataset.references(Split.DEV).size());
-    assertEquals(408, dataset.references(Split.TEST).size());
-    assertEquals(
-        203, dataset.references().stream().map(AnnotatedReference::sourceGroup).distinct().count());
-    assertEquals(8, dataset.references().stream().mapToInt(r -> r.ambiguousFields().size()).sum());
-    assertEquals(
-        7, dataset.references().stream().filter(r -> !r.ambiguousFields().isEmpty()).count());
-    assertEquals(
-        60, dataset.references().stream().filter(r -> r.sourceType().equals("ВКР")).count());
-    assertEquals(
-        42,
-        dataset.references().stream().filter(r -> r.sourceType().equals("Диссертация")).count());
-    var sample =
-        dataset.references().stream()
-            .filter(r -> r.input().id().equals("R103"))
-            .findFirst()
-            .orElseThrow();
-    assertEquals("2023", sample.expectedFields().get(ReferenceField.YEAR));
-    assertEquals("2024-11-12", sample.expectedFields().get(ReferenceField.ACCESS_DATE));
-    assertEquals(Set.of(ReferenceField.DOCUMENT_TYPE), sample.ambiguousFields());
-    var yearConflict = dataset.references().stream()
-        .filter(r -> r.input().id().equals("R412")).findFirst().orElseThrow();
-    assertEquals(Set.of(ReferenceField.YEAR), yearConflict.ambiguousFields());
-    assertEquals(402, dataset.references(Split.TEST).stream()
-        .filter(r -> r.ambiguousFields().isEmpty()).count());
+    assertEquals(490, dataset.references().size());
+    assertEquals(90, dataset.references(Split.DEV).size());
+    assertEquals(400, dataset.references(Split.TEST).size());
+    assertEquals(203, dataset.references().stream().map(AnnotatedReference::sourceGroup).distinct().count());
+    assertTrue(dataset.references().stream().allMatch(r -> r.ambiguousFields().isEmpty()));
+    assertEquals(54, dataset.references().stream().filter(r -> r.sourceType().equals("ВКР")).count());
+    assertEquals(40, dataset.references().stream().filter(r -> r.sourceType().equals("Диссертация")).count());
+    assertEquals("b18b1e2d3d7ab35744874a095fd50fad4cbeecfdd497ef6d1a7fcbc020ccc657", dataset.sha256());
     assertArrayEquals(original, Files.readAllBytes(path));
   }
 
