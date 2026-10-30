@@ -1,2 +1,0 @@
-"method","records","errors","micro_precision","micro_recall","micro_F1","macro_F1","fully_correct_extraction","eligible_records","fully_correct_rate","extra_filled_fields","conflicting_fields"
-"anystyle","92","0","0.554198","0.405134","0.468085","0.391502","0","91","0.000000","31","261"

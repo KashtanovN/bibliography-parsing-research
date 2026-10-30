@@ -22,60 +22,16 @@ bash scripts/install-anystyle.sh
 
 Процесс переиспользует модель между ссылками. Первичная загрузка модели и проверка файлов входят в подготовку среды, а не в длительность отдельного вызова. Сохраняются версии Ruby и зависимостей, SHA модели, файлов библиотек/словаря, мостика и команды запуска. Изменение среды между DEV и TEST отклоняется. Тайм-ауты и ошибки не исключаются из оценки.
 
-## Запуск и фиксация
 
-Ниже команды воспроизведения. **Уже полученный TEST повторять не требуется.** Все выходные папки должны быть новыми. Из `backend` после сборки `./mvnw package`:
+## Запуск в общем эксперименте
 
-```sh
-java -jar target/bibliography-1.0.0.jar \
-  --parse-dataset=../датасет.xlsx --method=anystyle --split=dev \
-  --output=../research-runs/НОВЫЙ-ANYSTYLE-DEV
-
-java -jar target/bibliography-1.0.0.jar \
-  --evaluate-run=../research-runs/НОВЫЙ-ANYSTYLE-DEV --dataset=../датасет.xlsx
-
-java -jar target/bibliography-1.0.0.jar \
-  --freeze-experiment=../research-runs/НОВЫЙ-ANYSTYLE-DEV --dataset=../датасет.xlsx
-
-java -jar ../research-runs/НОВЫЙ-ANYSTYLE-DEV/frozen-protocol/application.jar \
-  --parse-dataset=../датасет.xlsx --method=anystyle --split=test \
-  --protocol=../research-runs/НОВЫЙ-ANYSTYLE-DEV/frozen-protocol \
-  --output=../research-runs/НОВЫЙ-ANYSTYLE-TEST
-
-java -jar ../research-runs/НОВЫЙ-ANYSTYLE-DEV/frozen-protocol/application.jar \
-  --evaluate-run=../research-runs/НОВЫЙ-ANYSTYLE-TEST --dataset=../датасет.xlsx
-
-java -jar ../research-runs/НОВЫЙ-ANYSTYLE-DEV/frozen-protocol/application.jar \
-  --format-run=../research-runs/НОВЫЙ-ANYSTYLE-TEST --dataset=../датасет.xlsx
-
-java -jar ../research-runs/НОВЫЙ-ANYSTYLE-DEV/frozen-protocol/application.jar \
-  --quality-run=../research-runs/НОВЫЙ-ANYSTYLE-TEST --dataset=../датасет.xlsx
-```
-
-`--anystyle-command` выбирает другой исполняемый мостик вместо `../scripts/anystyle-worker.sh`. Команда передаётся в ProcessBuilder без shell-интерполяции. `--method=all` запускает все четыре метода вместе. `--method=anystyle` позволяет проверить один метод. Для нового общего эксперимента сначала выполните полный DEV с `--method=all`, зафиксируйте протокол и только затем запускайте TEST с тем же параметром. Архивные JAR сохраняют поведение своего эксперимента.
-
-## Архив опубликованного сравнения
-
-Происхождение опубликованных запусков сохранено в [архивах](../results/README.md). Общий запуск четырёх методов описан в [EXPERIMENTS.md](EXPERIMENTS.md); команда ниже объединяет уже сохранённые ответы без новых вызовов моделей.
-
-Из `backend`:
+Для короткой технической проверки AnyStyle на DEV из `backend`:
 
 ```sh
 java -jar target/bibliography-1.0.0.jar \
-  --compare-runs=../research-runs/final-test-20261029 \
-  --additional-run=../research-runs/anystyle-test-20261029 \
-  --dataset=../датасет.xlsx \
-  --comparison-output=../research-runs/НОВОЕ-СРАВНЕНИЕ-4-МЕТОДОВ
+  --parse-dataset=../Dataset.xlsx --method=anystyle --split=dev --limit=3
 ```
 
-Команда не запускает парсеры и не меняет архивы. Проверяются SHA ответов/построчных сравнений, протоколы и JAR, одинаковый набор и контекст оформления, неизменность общей оценки/нормализации/форматтера. Метрики заново вычисляются из сохранённых ответов и должны точно совпасть с архивными. Допускается изменение только класса составления таблицы, не методов или оценщика.
+Для итогового сравнения AnyStyle не добавляется отдельным TEST задним числом. Выполняются общий полный DEV и общий TEST четырёх методов. [Порядок запуска](EXPERIMENTS.md).
 
-Результат содержит `evaluation/metrics.json`, `field_metrics.csv`, `comparison.csv`, `report.md`, полный `records.jsonl` на 1632 пары, исходные ответы и результаты форматирования. Это составное сравнение, не новый `experiment-run-v2`; оно не передаётся обычным `--evaluate-run`/`--quality-run`. Предметная проверка выполняется по двум исходным прогонам с их архивными JAR. Старый трёхметодный прогон также продолжает оцениваться только своим архивным JAR.
-
-## Результаты 29 октября 2026 года
-
-- DEV: 92 SUCCESS, Micro F1 0,4681, полное совпадение 0/91.
-- TEST: 408 SUCCESS, Micro F1 0,4771, precision 0,5530, recall 0,4195; полное совпадение 2/403 (0,50%).
-- TEST: TP 1663, FP 1344, FN 2301; 119 EXTRA и 1225 WRONG.
-- Форматтер: 121 FORMATTED и 287 NEEDS_REVIEW. Это технические статусы, не доля ГОСТ-корректных ссылок. [Итоговые решения проверки](../results/review-20261029/README.md) опубликованы отдельно от первоначального пустого бланка.
-- Архивы: `research-runs/anystyle-dev-20261029`, `anystyle-test-20261029`, `four-methods-test-20261029`. Локальные папки игнорируются Git. Их публикуемые копии — `results/anystyle-dev-20261029`, `results/anystyle-test-20261029` и `results/four-methods-test-20261029`; в каждой есть SHA256SUMS. Ранее опубликованный `results/final-test-20261029` сохраняет три исходных метода без изменений.
+Новые показатели AnyStyle на актуальном Excel пока не получены. Прежние результаты удалены из текущей версии и сохранены отдельно. Команда `--compare-runs` остаётся технической возможностью объединения совместимых сохранённых ответов, но для нового опыта не требуется.

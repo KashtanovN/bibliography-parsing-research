@@ -1,4 +1,0 @@
-"method","records","errors","micro_precision","micro_recall","micro_F1","macro_F1","fully_correct_extraction","eligible_records","fully_correct_rate","extra_filled_fields","conflicting_fields"
-"rules","408","0","0.957750","0.949294","0.953503","0.952409","292","403","0.724566","19","147"
-"grobid","408","0","0.471844","0.323411","0.383775","0.237112","0","403","0.000000","299","1136"
-"ollama","408","0","0.886859","0.881937","0.884392","0.875875","77","403","0.191067","228","218"

@@ -163,6 +163,10 @@ class RemoteCitationParsersTest {
     assertEquals(1, user.size());
     assertEquals(input().rawCitation(), user.path("rawCitation").asText());
     assertFalse(body.get().contains("private-id"));
+    String prompt = request.path("messages").get(0).path("content").asText();
+    for (String type : java.util.List.of("Раздел книги", "Газетная публикация", "Нормативный акт", "Стандарт", "Сетевой документ")) {
+      assertTrue(prompt.contains("'" + type + "'"), type);
+    }
     assertEquals("Выдуманный издатель", parsed.fields().get(ReferenceField.PUBLISHER));
     assertEquals(response, parsed.rawResponse());
   }

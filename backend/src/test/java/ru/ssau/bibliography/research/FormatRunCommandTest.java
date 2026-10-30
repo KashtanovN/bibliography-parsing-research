@@ -17,7 +17,7 @@ class FormatRunCommandTest {
     Path run = directory.resolve("run");
     ParseReferencesCommand.run(
         new String[] {
-          "--parse-dataset=../датасет.xlsx", "--method=rules", "--limit=3", "--output=" + run
+          "--parse-dataset=../Dataset.xlsx", "--method=rules", "--limit=3", "--output=" + run
         });
     var original = Files.readAllLines(run.resolve("rules.jsonl"));
     var manifest =
@@ -40,7 +40,7 @@ class FormatRunCommandTest {
       Files.write(run.resolve(method + ".jsonl"), lines);
     }
     byte[] source = Files.readAllBytes(run.resolve("ollama.jsonl"));
-    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../датасет.xlsx"});
+    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../Dataset.xlsx"});
     JsonNode contexts =
         json.readTree(run.resolve("formatting/formatting.json").toFile()).get("contexts");
     for (String method : List.of("rules", "grobid", "ollama")) {
@@ -59,7 +59,7 @@ class FormatRunCommandTest {
         FileAlreadyExistsException.class,
         () ->
             FormatRunCommand.run(
-                new String[] {"--format-run=" + run, "--dataset=../датасет.xlsx"}));
+                new String[] {"--format-run=" + run, "--dataset=../Dataset.xlsx"}));
   }
 
   @Test
@@ -67,7 +67,7 @@ class FormatRunCommandTest {
     Path run = directory.resolve("run");
     ParseReferencesCommand.run(
         new String[] {
-          "--parse-dataset=../датасет.xlsx", "--method=rules", "--limit=1", "--output=" + run
+          "--parse-dataset=../Dataset.xlsx", "--method=rules", "--limit=1", "--output=" + run
         });
     var response =
         (com.fasterxml.jackson.databind.node.ObjectNode)
@@ -75,7 +75,7 @@ class FormatRunCommandTest {
     response.put("status", "ERROR");
     response.set("fields", json.createObjectNode());
     Files.writeString(run.resolve("rules.jsonl"), json.writeValueAsString(response) + "\n");
-    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../датасет.xlsx"});
+    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../Dataset.xlsx"});
     var result = json.readTree(Files.readString(run.resolve("formatting/rules.jsonl")));
     assertEquals("SKIPPED_SOURCE_ERROR", result.get("status").asText());
     assertFalse(result.has("formatting"));
@@ -86,7 +86,7 @@ class FormatRunCommandTest {
             FormatRunCommand.run(
                 new String[] {
                   "--format-run=" + run,
-                  "--dataset=../датасет.xlsx",
+                  "--dataset=../Dataset.xlsx",
                   "--format-output=" + directory.resolve("bad")
                 }));
     assertFalse(Files.exists(directory.resolve("bad")));

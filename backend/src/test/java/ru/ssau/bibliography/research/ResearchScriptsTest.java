@@ -83,6 +83,52 @@ exit 0
   }
 
   @Test
+  void devPipelineUsesAllMethodsWithoutTestLimitOrAutomaticFreeze() throws Exception {
+    Path project = temporary.resolve("project with spaces");
+    Files.createDirectories(project.resolve("scripts"));
+    Files.createDirectories(project.resolve("backend/target"));
+    Files.copy(root.resolve("scripts/run-dev.sh"), project.resolve("scripts/run-dev.sh"));
+    Files.writeString(project.resolve("backend/target/bibliography-1.0.0.jar"), "stub");
+    Path bin = temporary.resolve("dev-bin");
+    Files.createDirectories(bin);
+    Path worker = bin.resolve("java");
+    Files.writeString(worker, """
+#!/bin/bash
+printf '%s\n' "$*" >> "$RESEARCH_TEST_LOG"
+for arg in "$@"; do
+  if [[ "$arg" == --output=* ]]; then
+    mkdir -p "${arg#--output=}"
+    printf '{}\n' > "${arg#--output=}/summary.json"
+  fi
+done
+""");
+    assertTrue(worker.toFile().setExecutable(true));
+    Path log = temporary.resolve("dev.log");
+    Path run = project.resolve("research-runs/dev-four-methods");
+    var pb = new ProcessBuilder("bash", project.resolve("scripts/run-dev.sh").toString())
+        .redirectErrorStream(true);
+    pb.environment().put("PATH", bin + java.io.File.pathSeparator + System.getenv("PATH"));
+    pb.environment().put("RESEARCH_TEST_LOG", log.toString());
+    var process = pb.start();
+    String output = new String(process.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+    assertEquals(0, process.waitFor(), output);
+    List<String> calls = Files.readAllLines(log);
+    assertEquals(3, calls.size());
+    assertTrue(calls.get(0).contains("--method=all --split=dev"), calls.toString());
+    assertTrue(calls.get(0).contains("--parse-dataset=" + project.resolve("Dataset.xlsx")));
+    assertTrue(calls.get(1).contains("--evaluate-run="));
+    assertTrue(calls.get(2).contains("--format-run="));
+    assertFalse(String.join("\n", calls).contains("--limit"));
+    assertFalse(String.join("\n", calls).contains("--freeze-experiment"));
+    assertFalse(Files.exists(run.resolve("frozen-protocol")));
+    assertEquals("COMPLETED", Files.readString(Path.of(run + ".pipeline-status")).strip());
+    var again = pb.start();
+    String repeated = new String(again.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+    assertEquals(2, again.waitFor(), repeated);
+    assertEquals(calls, Files.readAllLines(log));
+  }
+
+  @Test
   void missingProtocolIsRejectedBeforeCreatingRun() throws Exception {
     Path run = temporary.resolve("absent-run");
     var p = new ProcessBuilder("bash", root.resolve("scripts/run-final-test.sh").toString(),

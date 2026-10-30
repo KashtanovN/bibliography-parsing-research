@@ -18,11 +18,11 @@ class EvaluateRunCommandTest {
     Path run = temporary.resolve("run");
     ParseReferencesCommand.run(
         new String[] {
-          "--parse-dataset=../датасет.xlsx", "--method=rules", "--limit=3", "--output=" + run
+          "--parse-dataset=../Dataset.xlsx", "--method=rules", "--limit=3", "--output=" + run
         });
     byte[] predictions = Files.readAllBytes(run.resolve("rules.jsonl"));
-    byte[] dataset = Files.readAllBytes(Path.of("../датасет.xlsx"));
-    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + run, "--dataset=../датасет.xlsx"});
+    byte[] dataset = Files.readAllBytes(Path.of("../Dataset.xlsx"));
+    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + run, "--dataset=../Dataset.xlsx"});
     JsonNode report = json.readTree(run.resolve("evaluation/metrics.json").toFile());
     assertEquals(3, report.path("records").asInt());
     assertEquals("dev", report.path("split").asText());
@@ -45,12 +45,12 @@ class EvaluateRunCommandTest {
             .path("recordsSha256")
             .asText());
     assertArrayEquals(predictions, Files.readAllBytes(run.resolve("rules.jsonl")));
-    assertArrayEquals(dataset, Files.readAllBytes(Path.of("../датасет.xlsx")));
+    assertArrayEquals(dataset, Files.readAllBytes(Path.of("../Dataset.xlsx")));
     assertThrows(
         FileAlreadyExistsException.class,
         () ->
             EvaluateRunCommand.run(
-                new String[] {"--evaluate-run=" + run, "--dataset=../датасет.xlsx"}));
+                new String[] {"--evaluate-run=" + run, "--dataset=../Dataset.xlsx"}));
   }
 
   @Test
@@ -58,7 +58,7 @@ class EvaluateRunCommandTest {
     Path run = temporary.resolve("run");
     ParseReferencesCommand.run(
         new String[] {
-          "--parse-dataset=../датасет.xlsx", "--method=rules", "--limit=2", "--output=" + run
+          "--parse-dataset=../Dataset.xlsx", "--method=rules", "--limit=2", "--output=" + run
         });
     var manifest =
         (com.fasterxml.jackson.databind.node.ObjectNode)
@@ -70,7 +70,7 @@ class EvaluateRunCommandTest {
         IllegalArgumentException.class,
         () ->
             EvaluateRunCommand.run(
-                new String[] {"--evaluate-run=" + run, "--dataset=../датасет.xlsx"}));
+                new String[] {"--evaluate-run=" + run, "--dataset=../Dataset.xlsx"}));
     manifest.put("datasetSha256", sha);
     json.writeValue(run.resolve("run.json").toFile(), manifest);
     var first = Files.readAllLines(run.resolve("rules.jsonl")).get(0);
@@ -79,14 +79,14 @@ class EvaluateRunCommandTest {
         IllegalArgumentException.class,
         () ->
             EvaluateRunCommand.run(
-                new String[] {"--evaluate-run=" + run, "--dataset=../датасет.xlsx"}));
+                new String[] {"--evaluate-run=" + run, "--dataset=../Dataset.xlsx"}));
     assertFalse(Files.exists(run.resolve("evaluation")));
   }
 
   @Test
   void allRecordsRetainErrorsWrongValuesAndAmbiguityWithoutDroppingRows() throws Exception {
     Path run = temporary.resolve("full");
-    ParseReferencesCommand.run(new String[] {"--parse-dataset=../датасет.xlsx", "--output=" + run});
+    ParseReferencesCommand.run(new String[] {"--parse-dataset=../Dataset.xlsx", "--output=" + run});
     var lines = Files.readAllLines(run.resolve("rules.jsonl"));
     ObjectNode first = (ObjectNode) json.readTree(lines.get(0));
     first.put("status", "ERROR");
@@ -97,7 +97,7 @@ class EvaluateRunCommandTest {
     ((ObjectNode) second.get("fields")).put("YEAR", "1901");
     lines.set(1, json.writeValueAsString(second));
     Files.write(run.resolve("rules.jsonl"), lines);
-    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + run, "--dataset=../датасет.xlsx"});
+    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + run, "--dataset=../Dataset.xlsx"});
     var rows = Files.readAllLines(run.resolve("evaluation/records.jsonl"));
     assertEquals(92, rows.size());
     JsonNode error = json.readTree(rows.get(0));

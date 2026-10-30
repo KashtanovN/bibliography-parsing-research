@@ -6,12 +6,12 @@ if (( $# > 2 )); then
   printf 'Использование: bash scripts/run-final-test.sh [НОВАЯ_ПАПКА_TEST] [ПАПКА_ПРОТОКОЛА]\n' >&2
   exit 2
 fi
-task_run=${1:-"$task_root/research-runs/test-$(date -u '+%Y%m%dT%H%M%SZ')"}
+task_run=${1:-"$task_root/research-runs/test-four-methods"}
 task_protocol=${2:-"$task_root/research-runs/dev-four-methods/frozen-protocol"}
 if [[ "$task_run" != /* ]]; then task_run="$PWD/$task_run"; fi
 if [[ "$task_protocol" != /* ]]; then task_protocol="$PWD/$task_protocol"; fi
 task_jar="$task_protocol/application.jar"
-task_dataset="$task_root/датасет.xlsx"
+task_dataset="$task_root/Dataset.xlsx"
 if [[ -e "$task_run" || -e "$task_run.pipeline-status" ]]; then
   printf 'Папка или состояние запуска уже существуют: %s\nПовторный запуск автоматически не выполняется.\n' "$task_run" >&2
   exit 2

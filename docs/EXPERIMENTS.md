@@ -1,19 +1,22 @@
 # Запуск и сохранение эксперимента
 
-Текущая программа запускает четыре метода через `--method=all`: правила, GROBID, Qwen3-8B и AnyStyle. Настройка выполняется на DEV, затем фиксируется протокол и обрабатывается полный TEST. [Опубликованные результаты](../results/README.md) уже получены; команды ниже предназначены для нового эксперимента.
+Текущая программа запускает четыре метода через `--method=all`: правила, GROBID, Qwen3-8B и AnyStyle. Настройка выполняется на DEV, затем фиксируется протокол и обрабатывается полный TEST. На актуальном Dataset.xlsx общий эксперимент ещё не выполнен; прежние замеры сохранены отдельно и не используются как результаты этой версии.
 
 ## Среда и полный DEV
+
+Из корня проекта после сборки: `bash scripts/check-research-environment.sh` проверяет Excel, доступность GROBID, наличие Qwen и загрузку AnyStyle без разбора строк. `bash scripts/run-dev.sh` выполняет полный DEV, оценку и оформление; он не фиксирует протокол автоматически.
+
 
 Установите [AnyStyle](ANYSTYLE.md), запустите [GROBID и Ollama](PARSERS.md). Из `backend`:
 
 ```sh
 ./mvnw package
 java -jar target/bibliography-1.0.0.jar \
-  --parse-dataset=../датасет.xlsx --method=all --split=dev \
+  --parse-dataset=../Dataset.xlsx --method=all --split=dev \
   --output=../research-runs/dev-four-methods
 
 java -jar target/bibliography-1.0.0.jar \
-  --evaluate-run=../research-runs/dev-four-methods --dataset=../датасет.xlsx
+  --evaluate-run=../research-runs/dev-four-methods --dataset=../Dataset.xlsx
 ```
 
 Имя выходной папки должно быть новым. Для фиксации нужен полный DEV, без `--limit`; короткая проверка на трёх строках не подходит.
@@ -23,7 +26,7 @@ java -jar target/bibliography-1.0.0.jar \
 ```sh
 java -jar target/bibliography-1.0.0.jar \
   --freeze-experiment=../research-runs/dev-four-methods \
-  --dataset=../датасет.xlsx
+  --dataset=../Dataset.xlsx
 ```
 
 В `frozen-protocol/` сохраняются `protocol.json`, его SHA-256, критерии оценки/оформления/проверки и исполняемый `application.jar`. Фиксируются версия данных, 92 DEV / 408 TEST, конфигурации всех методов, модель/digest Qwen, версии сервисов, модель и среда AnyStyle, промпт, тайм-аут и снимок кода.
@@ -36,7 +39,7 @@ java -jar target/bibliography-1.0.0.jar \
 
 ```sh
 java -jar ../research-runs/dev-four-methods/frozen-protocol/application.jar \
-  --parse-dataset=../датасет.xlsx --method=all --split=test \
+  --parse-dataset=../Dataset.xlsx --method=all --split=test \
   --protocol=../research-runs/dev-four-methods/frozen-protocol \
   --output=../research-runs/test-four-methods
 ```
@@ -74,11 +77,18 @@ bash scripts/watch-test-progress.sh "$PWD/research-runs/test-four-methods"
 
 ```sh
 java -jar ../research-runs/test-four-methods/protocol/application.jar \
-  --evaluate-run=../research-runs/test-four-methods --dataset=../датасет.xlsx
+  --evaluate-run=../research-runs/test-four-methods --dataset=../Dataset.xlsx
 ```
 
 Аналогично работают `--format-run` и `--quality-run`; существующие подпапки не перезаписываются, для повторного расчёта задавайте новый выходной путь. Процедура предметной проверки — в [QUALITY_REVIEW.md](QUALITY_REVIEW.md).
 
-## Опубликованные архивы
 
-[Навигация по результатам](../results/README.md) отделяет исходные прогоны, четырёхметодное сравнение и итоговую проверку. Три исходных метода и AnyStyle в опубликованных данных получены двумя зафиксированными прогонами; их ответы объединены без повторных вызовов. Это происхождение сохраняется в run.json и протоколах. Копии критериев и JAR внутри архивов описывают свой этап и не меняются вместе с текущей документацией.
+## Версия данных и статус
+
+Файл Dataset.xlsx фиксируется по SHA-256 `8aae705b5124e6116ba759fac71d2c731b9f7f480731d6ec4e39187d6ab65179`. После запуска менять его нельзя. При любой замене данных нужен новый полный DEV и новый протокол. Прежние замеры и их протоколы убраны из рабочей версии, история Git сохранена.
+
+Исправления эталона следуют за анализом прежнего TEST. Новый прогон на прежнем разбиении не является новой слепой оценкой; указать это ограничение в статье. До нового TEST разрешена настройка только на DEV.
+
+Словарь видов документов в промпте Qwen расширен до категорий схемы; версия промпта `citation-extraction-v2`. Нормализация остаётся `field-evaluation-v2`: внутрисловные дефисы и переносы не склеиваются; категории «Раздел книги» и «Материал сборника» не считаются синонимами. Эти ограничения едины для всех методов, без исправления предсказаний по эталону.
+
+После нового TEST нужны новые решения проверки ГОСТ и необоснованных добавлений. Старые человеческие решения не переносятся автоматически на другие ответы. Для оформления проверяется достоверность готовой ссылки: исходное повреждение, например оборванное заглавие, может делать её некорректной, даже если извлечение верно воспроизводит вход. В основаниях отделять этот случай от ошибки метода.

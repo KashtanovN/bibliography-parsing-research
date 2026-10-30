@@ -18,7 +18,7 @@ class ExcelDatasetLoaderTest {
 
   @Test
   void readsActualReviewedDatasetWithoutChangingIt() throws Exception {
-    Path path = Path.of("..", "датасет.xlsx");
+    Path path = Path.of("..", "Dataset.xlsx");
     byte[] original = Files.readAllBytes(path);
     ResearchDataset dataset = loader.load(path);
     assertEquals(500, dataset.references().size());
@@ -26,9 +26,9 @@ class ExcelDatasetLoaderTest {
     assertEquals(408, dataset.references(Split.TEST).size());
     assertEquals(
         203, dataset.references().stream().map(AnnotatedReference::sourceGroup).distinct().count());
-    assertEquals(7, dataset.references().stream().mapToInt(r -> r.ambiguousFields().size()).sum());
+    assertEquals(8, dataset.references().stream().mapToInt(r -> r.ambiguousFields().size()).sum());
     assertEquals(
-        6, dataset.references().stream().filter(r -> !r.ambiguousFields().isEmpty()).count());
+        7, dataset.references().stream().filter(r -> !r.ambiguousFields().isEmpty()).count());
     assertEquals(
         60, dataset.references().stream().filter(r -> r.sourceType().equals("ВКР")).count());
     assertEquals(
@@ -42,6 +42,11 @@ class ExcelDatasetLoaderTest {
     assertEquals("2023", sample.expectedFields().get(ReferenceField.YEAR));
     assertEquals("2024-11-12", sample.expectedFields().get(ReferenceField.ACCESS_DATE));
     assertEquals(Set.of(ReferenceField.DOCUMENT_TYPE), sample.ambiguousFields());
+    var yearConflict = dataset.references().stream()
+        .filter(r -> r.input().id().equals("R412")).findFirst().orElseThrow();
+    assertEquals(Set.of(ReferenceField.YEAR), yearConflict.ambiguousFields());
+    assertEquals(402, dataset.references(Split.TEST).stream()
+        .filter(r -> r.ambiguousFields().isEmpty()).count());
     assertArrayEquals(original, Files.readAllBytes(path));
   }
 

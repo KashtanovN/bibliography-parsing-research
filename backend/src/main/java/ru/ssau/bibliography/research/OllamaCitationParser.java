@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class OllamaCitationParser implements CitationParser {
-  public static final String PROMPT_VERSION = "citation-extraction-v1";
+  public static final String PROMPT_VERSION = "citation-extraction-v2";
   private static final ObjectMapper JSON =
       new ObjectMapper()
           .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
@@ -24,8 +24,11 @@ public final class OllamaCitationParser implements CitationParser {
 YEAR — год публикации, ACCESS_DATE — только явно указанная дата обращения YYYY-MM-DD.
 PAGES — число/диапазон без С./с.; PAGE_MEANING: 'Указатель страниц', 'Общий объём' или null.
 DOI — идентификатор без https://doi.org/; URL — адрес только из самой строки.
-DOCUMENT_TYPE: 'Книга', 'Журнальная статья', 'Материал сборника', 'Диссертация',
-'Автореферат диссертации', 'Сайт', 'Нормативный документ' либо null, если вид неясен.
+DOCUMENT_TYPE: 'Книга', 'Журнальная статья', 'Материал сборника', 'Раздел книги',
+'Газетная публикация', 'Диссертация', 'Автореферат диссертации', 'Сайт',
+'Сетевой документ', 'Нормативный акт', 'Стандарт' либо null, если вид неясен.
+Раздел книги отличается от статьи в сборнике; газетная публикация — от журнальной.
+Наличие DOI или URL само по себе не определяет вид документа.
 Все значения — строки или null. Верни только JSON без Markdown, пояснений и рассуждений.
 """;
   private final URI endpoint;

@@ -14,7 +14,7 @@ java -jar target/bibliography-1.0.0.jar '--parse-text=Иванов И.И. Мет
 Вместо отдельной строки можно обработать первые три записи dev:
 
 ```sh
-java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx --method=rules --split=dev --limit=3
+java -jar target/bibliography-1.0.0.jar --parse-dataset=../Dataset.xlsx --method=rules --split=dev --limit=3
 ```
 
 После запуска выводится путь к новой папке с результатами. По умолчанию это `research-runs/` в корне проекта; она исключена из Git. Необязательный `--output=ПУТЬ` задаёт новую папку: существующую папку программа не перезаписывает. Путь с пробелами заключайте в кавычки вместе с аргументом.
@@ -33,7 +33,7 @@ curl http://127.0.0.1:8070/api/isalive
 Из `backend`:
 
 ```sh
-java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx --method=grobid --split=dev --limit=3
+java -jar target/bibliography-1.0.0.jar --parse-dataset=../Dataset.xlsx --method=grobid --split=dev --limit=3
 ```
 
 Адаптер вызывает `/api/processCitation`, передаёт `citations`, устанавливает `consolidateCitations=0` и читает TEI XML. Обогащение из внешних баз отключено. Пропущенные GROBID поля не восстанавливаются парсером правил. Тип документа и роль страниц выводятся из структуры TEI; исходный XML сохраняется. Некоторые из 17 полей GROBID может не возвращать, это ограничение метода.
@@ -51,10 +51,10 @@ ollama pull qwen3:8b
 Из `backend`:
 
 ```sh
-java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx --method=ollama --split=dev --limit=3 --model=qwen3:8b
+java -jar target/bibliography-1.0.0.jar --parse-dataset=../Dataset.xlsx --method=ollama --split=dev --limit=3 --model=qwen3:8b
 ```
 
-По умолчанию запрос идёт на локальный `/api/chat`, `stream=false`, `think=false`, JSON-схема на 17 строковых/nullable полей, temperature=0, seed=42, num_ctx=8192, num_predict=2048. Полный промпт с версией и настройки сохраняются в `run.json`. Записываются версия Ollama и digest модели, если их удалось получить. Температура и seed уменьшают вариативность, но не гарантируют одинаковый результат между разными версиями и аппаратными платформами.
+По умолчанию запрос идёт на локальный `/api/chat`, `stream=false`, `think=false`, JSON-схема на 17 строковых/nullable полей, temperature=0, seed=42, num_ctx=8192, num_predict=2048. Промпт `citation-extraction-v2` перечисляет категории схемы, включая раздел книги, газетную публикацию, нормативный акт, стандарт и сетевой документ. Полный промпт с версией и настройки сохраняются в `run.json`. Записываются версия Ollama и digest модели, если их удалось получить. Температура и seed уменьшают вариативность, но не гарантируют одинаковый результат между разными версиями и аппаратными платформами.
 
 Ответы проверяются по схеме: Markdown, неизвестные ключи, числа вместо строк, пропущенные ключи, незавершённые и обрезанные ответы считаются ошибкой. Сгенерированные значения не удаляются по совпадению с эталоном или исходной строкой — иначе нельзя будет честно посчитать добавления LLM. Полный исходный JSON ответа сохраняется; оценщик выделяет лишние заполненные поля для предметной сверки, не объявляя их автоматически выдуманными фактами.
 
@@ -63,14 +63,14 @@ java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx -
 После запуска GROBID и Ollama и [установки AnyStyle](ANYSTYLE.md) из `backend`:
 
 ```sh
-java -jar target/bibliography-1.0.0.jar --parse-dataset=../датасет.xlsx --method=all --split=dev --limit=3
+java -jar target/bibliography-1.0.0.jar --parse-dataset=../Dataset.xlsx --method=all --split=dev --limit=3
 ```
 
 `--split` по умолчанию `dev`. Без `--limit` читается вся выбранная часть. `test` выбирается только явно и требует зафиксированного [протокола](EXPERIMENTS.md), всех четырёх методов и полного набора. После фиксации методов запускайте архивированный JAR:
 
 ```sh
 java -jar ../research-runs/dev-four-methods/frozen-protocol/application.jar \
-  --parse-dataset=../датасет.xlsx --method=all --split=test \
+  --parse-dataset=../Dataset.xlsx --method=all --split=test \
   --protocol=../research-runs/dev-four-methods/frozen-protocol
 ```
 
@@ -92,10 +92,10 @@ java -jar ../research-runs/dev-four-methods/frozen-protocol/application.jar \
 
 `rules-v1` — фиксированный эвристический базовый метод: явные маркеры DOI/ISBN/EDN, URL/дата обращения, авторы с инициалами, границы `//`, год, том/номер/страницы, ограниченный словарь мест издания. Он может ошибаться на сложных форматах, нормативных документах и необычных именах; его предупреждение не является гарантией полноты. Исходная строка в журнале остаётся неизменной, хотя при извлечении пробелы объединяются. Никаких правил по ID записей или обращения к эталону нет.
 
-Тестовые HTTP-серверы проверяют интеграцию, а не качество настоящих GROBID/Qwen. Результаты реальных запусков опубликованы в [архивах TEST](../results/README.md).
+Тестовые HTTP-серверы проверяют интеграцию, а не качество настоящих GROBID/Qwen. Показатели на актуальном Excel ещё не получены; тесты адаптеров не заменяют реальное сравнение.
 
 Первичные документы: [GROBID API](https://grobid.readthedocs.io/en/latest/Grobid-service/), [Docker](https://grobid.readthedocs.io/en/latest/Grobid-docker/), [Ollama chat](https://docs.ollama.com/api/chat), [JSON schema](https://docs.ollama.com/capabilities/structured-outputs), [Qwen3:8b](https://ollama.com/library/qwen3:8b).
 
 ## AnyStyle
 
-`--method=all` запускает все четыре метода; для проверки только AnyStyle доступен `--method=anystyle`. Установка и отображение полей описаны в [ANYSTYLE.md](ANYSTYLE.md). В архивных JAR значение `all` соответствует набору методов зафиксированного эксперимента; опубликованные замеры повторно не запускаются.
+`--method=all` запускает все четыре метода; для проверки только AnyStyle доступен `--method=anystyle`. Установка и отображение полей описаны в [ANYSTYLE.md](ANYSTYLE.md). Для нового опыта все четыре метода запускаются одним полным DEV и одним TEST. Старые архивы убраны из текущей версии.

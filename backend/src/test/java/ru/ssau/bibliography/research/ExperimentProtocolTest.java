@@ -17,7 +17,7 @@ class ExperimentProtocolTest {
 
   private Path fixture() throws Exception {
     Path dev = temporary.resolve("dev");
-    ParseReferencesCommand.run(new String[] {"--parse-dataset=../датасет.xlsx", "--output=" + dev});
+    ParseReferencesCommand.run(new String[] {"--parse-dataset=../Dataset.xlsx", "--output=" + dev});
     ObjectNode manifest = (ObjectNode) json.readTree(dev.resolve("run.json").toFile());
     var methods = (ObjectNode) manifest.get("methods");
     ObjectNode grobid =
@@ -52,7 +52,7 @@ class ExperimentProtocolTest {
     Path protocol = temporary.resolve("protocol");
     ExperimentProtocol.run(
         new String[] {
-          "--freeze-experiment=" + dev, "--dataset=../датасет.xlsx", "--protocol-output=" + protocol
+          "--freeze-experiment=" + dev, "--dataset=../Dataset.xlsx", "--protocol-output=" + protocol
         });
     return protocol;
   }
@@ -75,7 +75,7 @@ class ExperimentProtocolTest {
             ExperimentProtocol.run(
                 new String[] {
                   "--freeze-experiment=" + dev,
-                  "--dataset=../датасет.xlsx",
+                  "--dataset=../Dataset.xlsx",
                   "--protocol-output=" + directory
                 }));
     Path copied = temporary.resolve("copy");
@@ -132,7 +132,7 @@ class ExperimentProtocolTest {
             ExperimentProtocol.run(
                 new String[] {
                   "--freeze-experiment=" + dev,
-                  "--dataset=../датасет.xlsx",
+                  "--dataset=../Dataset.xlsx",
                   "--protocol-output=" + temporary.resolve("bad")
                 }));
   }
@@ -141,9 +141,9 @@ class ExperimentProtocolTest {
   void unfrozenOrLimitedTestIsRejectedBeforeAnyServiceRequests() {
     for (String[] args :
         List.of(
-            new String[] {"--parse-dataset=../датасет.xlsx", "--split=test", "--method=all"},
+            new String[] {"--parse-dataset=../Dataset.xlsx", "--split=test", "--method=all"},
             new String[] {
-              "--parse-dataset=../датасет.xlsx",
+              "--parse-dataset=../Dataset.xlsx",
               "--split=test",
               "--method=all",
               "--protocol=unused",
@@ -173,7 +173,7 @@ done
         0,
         ParseReferencesCommand.run(
             new String[] {
-              "--parse-dataset=../датасет.xlsx",
+              "--parse-dataset=../Dataset.xlsx",
               "--method=anystyle",
               "--anystyle-command=" + worker,
               "--output=" + dev
@@ -213,18 +213,18 @@ done
         0,
         ParseReferencesCommand.run(
             new String[] {
-              "--parse-dataset=../датасет.xlsx",
+              "--parse-dataset=../Dataset.xlsx",
               "--method=anystyle",
               "--anystyle-command=" + worker,
               "--split=test",
               "--protocol=" + directory,
               "--output=" + test
             }));
-    var saved = SavedResearchRun.read(test, Path.of("../датасет.xlsx"));
+    var saved = SavedResearchRun.read(test, Path.of("../Dataset.xlsx"));
     assertEquals(408, saved.predictions().get("anystyle").size());
-    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + test, "--dataset=../датасет.xlsx"});
-    FormatRunCommand.run(new String[] {"--format-run=" + test, "--dataset=../датасет.xlsx"});
-    QualityReviewCommand.run(new String[] {"--quality-run=" + test, "--dataset=../датасет.xlsx"});
+    EvaluateRunCommand.run(new String[] {"--evaluate-run=" + test, "--dataset=../Dataset.xlsx"});
+    FormatRunCommand.run(new String[] {"--format-run=" + test, "--dataset=../Dataset.xlsx"});
+    QualityReviewCommand.run(new String[] {"--quality-run=" + test, "--dataset=../Dataset.xlsx"});
     assertEquals(
         408,
         json.readTree(test.resolve("formatting/formatting.json").toFile()).path("records").asInt());
@@ -240,7 +240,7 @@ done
             ExperimentProtocol.run(
                 new String[] {
                   "--freeze-experiment=" + completedDev,
-                  "--dataset=../датасет.xlsx",
+                  "--dataset=../Dataset.xlsx",
                   "--protocol-output=" + temporary.resolve("changed")
                 }));
   }

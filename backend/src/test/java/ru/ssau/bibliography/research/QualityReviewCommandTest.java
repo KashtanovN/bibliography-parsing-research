@@ -125,9 +125,9 @@ class QualityReviewCommandTest {
   void commandBindsReviewsToRealInputsAndRejectsStaleFiles() throws Exception {
     Path run = directory.resolve("run");
     ParseReferencesCommand.run(
-        new String[] {"--parse-dataset=../датасет.xlsx", "--limit=1", "--output=" + run});
-    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../датасет.xlsx"});
-    QualityReviewCommand.run(new String[] {"--quality-run=" + run, "--dataset=../датасет.xlsx"});
+        new String[] {"--parse-dataset=../Dataset.xlsx", "--limit=1", "--output=" + run});
+    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../Dataset.xlsx"});
+    QualityReviewCommand.run(new String[] {"--quality-run=" + run, "--dataset=../Dataset.xlsx"});
     var summary = json.readTree(run.resolve("quality/quality_metrics.json").toFile());
     assertTrue(
         summary.path("formatting").path("rules").path("fullyCorrectFormattingRate").isNull());
@@ -142,7 +142,7 @@ class QualityReviewCommandTest {
     QualityReviewCommand.run(
         new String[] {
           "--quality-run=" + run,
-          "--dataset=../датасет.xlsx",
+          "--dataset=../Dataset.xlsx",
           "--review-file=" + review,
           "--quality-output=" + directory.resolve("checked")
         });
@@ -161,7 +161,7 @@ class QualityReviewCommandTest {
             QualityReviewCommand.run(
                 new String[] {
                   "--quality-run=" + run,
-                  "--dataset=../датасет.xlsx",
+                  "--dataset=../Dataset.xlsx",
                   "--review-file=" + review,
                   "--quality-output=" + directory.resolve("stale")
                 }));
@@ -172,7 +172,7 @@ class QualityReviewCommandTest {
   void reviewIncludesMatchingConflictingAndExtraLlmFields() throws Exception {
     Path run = directory.resolve("llm-fixture");
     ParseReferencesCommand.run(
-        new String[] {"--parse-dataset=../датасет.xlsx", "--limit=1", "--output=" + run});
+        new String[] {"--parse-dataset=../Dataset.xlsx", "--limit=1", "--output=" + run});
     ObjectNode manifest = (ObjectNode) json.readTree(run.resolve("run.json").toFile());
     ObjectNode methods = json.createObjectNode();
     methods.putObject("ollama");
@@ -183,8 +183,8 @@ class QualityReviewCommandTest {
     prediction.put("method", "ollama");
     ((ObjectNode) prediction.get("fields")).put("YEAR", "1901").put("ISBN", "111");
     Files.writeString(run.resolve("ollama.jsonl"), json.writeValueAsString(prediction) + "\n");
-    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../датасет.xlsx"});
-    QualityReviewCommand.run(new String[] {"--quality-run=" + run, "--dataset=../датасет.xlsx"});
+    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../Dataset.xlsx"});
+    QualityReviewCommand.run(new String[] {"--quality-run=" + run, "--dataset=../Dataset.xlsx"});
     JsonNode review = json.readTree(run.resolve("quality/review.json").toFile());
     Set<String> relations = new HashSet<>();
     int fields = 0;
@@ -220,18 +220,18 @@ class QualityReviewCommandTest {
   void failedSourceReviewRoundTripsWithoutMissingNodeDifferences() throws Exception {
     Path run = directory.resolve("failed-source");
     ParseReferencesCommand.run(
-        new String[] {"--parse-dataset=../датасет.xlsx", "--limit=1", "--output=" + run});
+        new String[] {"--parse-dataset=../Dataset.xlsx", "--limit=1", "--output=" + run});
     ObjectNode prediction =
         (ObjectNode) json.readTree(Files.readString(run.resolve("rules.jsonl")));
     prediction.put("status", "ERROR");
     prediction.set("fields", json.createObjectNode());
     Files.writeString(run.resolve("rules.jsonl"), json.writeValueAsString(prediction) + "\n");
-    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../датасет.xlsx"});
-    QualityReviewCommand.run(new String[] {"--quality-run=" + run, "--dataset=../датасет.xlsx"});
+    FormatRunCommand.run(new String[] {"--format-run=" + run, "--dataset=../Dataset.xlsx"});
+    QualityReviewCommand.run(new String[] {"--quality-run=" + run, "--dataset=../Dataset.xlsx"});
     QualityReviewCommand.run(
         new String[] {
           "--quality-run=" + run,
-          "--dataset=../датасет.xlsx",
+          "--dataset=../Dataset.xlsx",
           "--review-file=" + run.resolve("quality/review.json"),
           "--quality-output=" + directory.resolve("failed-reviewed")
         });

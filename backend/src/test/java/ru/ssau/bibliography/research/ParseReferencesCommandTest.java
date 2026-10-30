@@ -22,7 +22,7 @@ class ParseReferencesCommandTest {
         0,
         ParseReferencesCommand.run(
             new String[] {
-              "--parse-dataset=../датасет.xlsx", "--method=rules", "--limit=3", "--output=" + output
+              "--parse-dataset=../Dataset.xlsx", "--method=rules", "--limit=3", "--output=" + output
             }));
     var meta = JSON.readTree(output.resolve("run.json").toFile());
     assertEquals("dev", meta.path("split").asText());
