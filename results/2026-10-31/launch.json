@@ -1,0 +1,16 @@
+{
+  "pid": 86762,
+  "launchedAt": "2026-10-31T09:38:49.143145+04:00",
+  "sourceCommit": "9715613bc8de9938e1e5e13dd9ccd970609d36e8",
+  "datasetSha256": "0b2f9cb80ef53994e608f61677f7bc1b9d807b7bfcdcd08a97202d8d6f7a168d",
+  "kind": "FULL_FRESH_INFERENCE",
+  "methods": [
+    "rules",
+    "grobid",
+    "ollama",
+    "anystyle"
+  ],
+  "dev": 90,
+  "test": 400,
+  "plannedResponses": 1960
+}

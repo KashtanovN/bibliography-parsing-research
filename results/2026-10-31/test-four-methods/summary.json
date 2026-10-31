@@ -1,0 +1,18 @@
+{
+  "records" : 400,
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods",
+  "statuses" : {
+    "rules" : {
+      "SUCCESS" : 400
+    },
+    "grobid" : {
+      "SUCCESS" : 400
+    },
+    "ollama" : {
+      "SUCCESS" : 400
+    },
+    "anystyle" : {
+      "SUCCESS" : 400
+    }
+  }
+}

@@ -1,0 +1,347 @@
+Dataset.xlsx: OK
+Dataset.xlsx: OK
+Начало DEV: 31.10.2026 09:38:50
+Папка: /Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/dev-four-methods
+{
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/dev-four-methods",
+  "statuses" : {
+    "rules" : {
+      "SUCCESS" : 90
+    },
+    "grobid" : {
+      "SUCCESS" : 90
+    },
+    "ollama" : {
+      "SUCCESS" : 90
+    },
+    "anystyle" : {
+      "SUCCESS" : 90
+    }
+  },
+  "records" : 90
+}
+{
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/dev-four-methods/evaluation",
+  "split" : "DEV",
+  "records" : 90,
+  "summaries" : {
+    "anystyle" : {
+      "records" : 90,
+      "success" : 90,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 369,
+      "fp" : 281,
+      "fn" : 523,
+      "precision" : 0.5676923076923077,
+      "recall" : 0.413677130044843,
+      "microF1" : 0.4785992217898833,
+      "macroF1" : 0.4317952581555523,
+      "macroFields" : 16,
+      "fullyCorrect" : 0,
+      "fullyCorrectEligible" : 90,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.0,
+      "extraFilledFields" : 23,
+      "conflictingFields" : 258
+    },
+    "grobid" : {
+      "records" : 90,
+      "success" : 90,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 289,
+      "fp" : 322,
+      "fn" : 603,
+      "precision" : 0.47299509001636664,
+      "recall" : 0.3239910313901345,
+      "microF1" : 0.38456420492348636,
+      "macroF1" : 0.2527977094699961,
+      "macroFields" : 16,
+      "fullyCorrect" : 0,
+      "fullyCorrectEligible" : 90,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.0,
+      "extraFilledFields" : 56,
+      "conflictingFields" : 266
+    },
+    "ollama" : {
+      "records" : 90,
+      "success" : 90,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 794,
+      "fp" : 79,
+      "fn" : 98,
+      "precision" : 0.9095074455899198,
+      "recall" : 0.8901345291479821,
+      "microF1" : 0.8997167138810198,
+      "macroF1" : 0.8853883226932182,
+      "macroFields" : 16,
+      "fullyCorrect" : 17,
+      "fullyCorrectEligible" : 90,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.18888888888888888,
+      "extraFilledFields" : 35,
+      "conflictingFields" : 44
+    },
+    "rules" : {
+      "records" : 90,
+      "success" : 90,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 855,
+      "fp" : 14,
+      "fn" : 37,
+      "precision" : 0.9838895281933256,
+      "recall" : 0.9585201793721974,
+      "microF1" : 0.9710391822827938,
+      "macroF1" : 0.9726940548810032,
+      "macroFields" : 16,
+      "fullyCorrect" : 71,
+      "fullyCorrectEligible" : 90,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.7888888888888889,
+      "extraFilledFields" : 0,
+      "conflictingFields" : 14
+    }
+  }
+}
+{
+  "contextSha256" : "dc86eb4a4d455f99001387a2ed7c361bce1eaefc35e739595dcfe0d854eb2a1f",
+  "records" : 90,
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/dev-four-methods/formatting",
+  "statuses" : {
+    "rules" : {
+      "FORMATTED" : 83,
+      "NEEDS_REVIEW" : 7
+    },
+    "grobid" : {
+      "FORMATTED" : 45,
+      "NEEDS_REVIEW" : 45
+    },
+    "ollama" : {
+      "FORMATTED" : 85,
+      "NEEDS_REVIEW" : 5
+    },
+    "anystyle" : {
+      "NEEDS_REVIEW" : 67,
+      "FORMATTED" : 23
+    }
+  }
+}
+DEV завершён. Изучите ошибки, затем зафиксируйте протокол отдельной командой.
+Dataset.xlsx: OK
+{
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/dev-four-methods/frozen-protocol",
+  "testRecords" : 400,
+  "protocolSha256" : "8cac2092faa92fd2661f7f3429e0e9f432f8c1c9091cef54d5fc8b3aea619ff9"
+}
+Dataset.xlsx: OK
+Начало TEST: 31.10.2026 10:15:38
+Папка: /Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods
+{
+  "records" : 400,
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods",
+  "statuses" : {
+    "rules" : {
+      "SUCCESS" : 400
+    },
+    "grobid" : {
+      "SUCCESS" : 400
+    },
+    "ollama" : {
+      "SUCCESS" : 400
+    },
+    "anystyle" : {
+      "SUCCESS" : 400
+    }
+  }
+}
+{
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/evaluation",
+  "split" : "TEST",
+  "records" : 400,
+  "summaries" : {
+    "anystyle" : {
+      "records" : 400,
+      "success" : 400,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 1648,
+      "fp" : 1315,
+      "fn" : 2274,
+      "precision" : 0.5561930475869051,
+      "recall" : 0.4201937786843447,
+      "microF1" : 0.478721859114016,
+      "macroF1" : 0.4452266511753533,
+      "macroFields" : 17,
+      "fullyCorrect" : 2,
+      "fullyCorrectEligible" : 400,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.005,
+      "extraFilledFields" : 110,
+      "conflictingFields" : 1205
+    },
+    "grobid" : {
+      "records" : 400,
+      "success" : 400,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 1274,
+      "fp" : 1410,
+      "fn" : 2648,
+      "precision" : 0.47466467958271236,
+      "recall" : 0.32483426823049466,
+      "microF1" : 0.38570996064184077,
+      "macroF1" : 0.2402669881212986,
+      "macroFields" : 17,
+      "fullyCorrect" : 0,
+      "fullyCorrectEligible" : 400,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.0,
+      "extraFilledFields" : 290,
+      "conflictingFields" : 1120
+    },
+    "ollama" : {
+      "records" : 400,
+      "success" : 400,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 3482,
+      "fp" : 403,
+      "fn" : 440,
+      "precision" : 0.8962676962676963,
+      "recall" : 0.8878123406425293,
+      "microF1" : 0.8920199820673754,
+      "macroF1" : 0.8767124750321614,
+      "macroFields" : 17,
+      "fullyCorrect" : 74,
+      "fullyCorrectEligible" : 400,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.185,
+      "extraFilledFields" : 208,
+      "conflictingFields" : 195
+    },
+    "rules" : {
+      "records" : 400,
+      "success" : 400,
+      "empty" : 0,
+      "errors" : 0,
+      "tp" : 3735,
+      "fp" : 143,
+      "fn" : 187,
+      "precision" : 0.9631253223310985,
+      "recall" : 0.952320244773075,
+      "microF1" : 0.9576923076923077,
+      "macroF1" : 0.9538348794387573,
+      "macroFields" : 17,
+      "fullyCorrect" : 296,
+      "fullyCorrectEligible" : 400,
+      "fullyCorrectExcludedAmbiguous" : 0,
+      "fullyCorrectRate" : 0.74,
+      "extraFilledFields" : 8,
+      "conflictingFields" : 135
+    }
+  }
+}
+{
+  "records" : 400,
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/formatting",
+  "statuses" : {
+    "rules" : {
+      "FORMATTED" : 389,
+      "NEEDS_REVIEW" : 11
+    },
+    "grobid" : {
+      "NEEDS_REVIEW" : 217,
+      "FORMATTED" : 183
+    },
+    "ollama" : {
+      "FORMATTED" : 366,
+      "NEEDS_REVIEW" : 34
+    },
+    "anystyle" : {
+      "NEEDS_REVIEW" : 281,
+      "FORMATTED" : 119
+    }
+  },
+  "contextSha256" : "b1d4b7e72a0ed06e9cf7c0ca2ccf9a3c09321dfcfbc3e8ce514a4cb1cb23eb4b"
+}
+{
+  "formatting" : {
+    "anystyle" : {
+      "eligible" : 400,
+      "correct" : 0,
+      "incorrect" : 0,
+      "pending" : 400,
+      "unclear" : 0,
+      "excludedAmbiguous" : 0,
+      "complete" : false,
+      "fullyCorrectFormattingRate" : null,
+      "confirmedLowerBound" : 0.0,
+      "possibleUpperBound" : 1.0
+    },
+    "grobid" : {
+      "eligible" : 400,
+      "correct" : 0,
+      "incorrect" : 0,
+      "pending" : 400,
+      "unclear" : 0,
+      "excludedAmbiguous" : 0,
+      "complete" : false,
+      "fullyCorrectFormattingRate" : null,
+      "confirmedLowerBound" : 0.0,
+      "possibleUpperBound" : 1.0
+    },
+    "ollama" : {
+      "eligible" : 400,
+      "correct" : 0,
+      "incorrect" : 0,
+      "pending" : 400,
+      "unclear" : 0,
+      "excludedAmbiguous" : 0,
+      "complete" : false,
+      "fullyCorrectFormattingRate" : null,
+      "confirmedLowerBound" : 0.0,
+      "possibleUpperBound" : 1.0
+    },
+    "rules" : {
+      "eligible" : 400,
+      "correct" : 0,
+      "incorrect" : 0,
+      "pending" : 400,
+      "unclear" : 0,
+      "excludedAmbiguous" : 0,
+      "complete" : false,
+      "fullyCorrectFormattingRate" : null,
+      "confirmedLowerBound" : 0.0,
+      "possibleUpperBound" : 1.0
+    }
+  },
+  "llmUnsupportedFacts" : {
+    "predictedFactFields" : 3094,
+    "reviewed" : 0,
+    "pending" : 3094,
+    "unclear" : 0,
+    "excludedAmbiguousFields" : 0,
+    "confirmedUnsupported" : 0,
+    "recordsWithConfirmedUnsupported" : 0,
+    "available" : true,
+    "complete" : false,
+    "totalUnsupported" : null,
+    "unsupportedRate" : null,
+    "derivedCategories" : 791,
+    "derivedCategoryErrors" : 0,
+    "derivedCategoryPendingOrUnclear" : 791
+  },
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/quality",
+  "records" : 400
+}
+Завершено: 31.10.2026 13:06:29
+Отчёт: /Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/quality/report.md
+Dataset.xlsx: OK
+/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/article/report.md
+Dataset.xlsx: OK
+Автоматические этапы завершены. Сводка: /Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/article/report.md
+Проверка оформления и добавлений: /Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/test-four-methods/quality/review.json

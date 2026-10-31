@@ -1,0 +1,18 @@
+{
+  "output" : "/Users/nikitakastanov/Documents/NIR/output/bibliography-parsing-research/research-runs/dev-four-methods",
+  "statuses" : {
+    "rules" : {
+      "SUCCESS" : 90
+    },
+    "grobid" : {
+      "SUCCESS" : 90
+    },
+    "ollama" : {
+      "SUCCESS" : 90
+    },
+    "anystyle" : {
+      "SUCCESS" : 90
+    }
+  },
+  "records" : 90
+}

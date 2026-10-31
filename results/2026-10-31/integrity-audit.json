@@ -1,0 +1,265 @@
+{
+ "datasetSha256": "0b2f9cb80ef53994e608f61677f7bc1b9d807b7bfcdcd08a97202d8d6f7a168d",
+ "auditReviewer": "Codex / AI",
+ "scope": "Independent integrity and arithmetic audit, not subject-matter decisions",
+ "splits": {
+  "dev": {
+   "recordsPerMethod": 90,
+   "fieldPairs": 6120,
+   "methods": {
+    "rules": {
+     "summary": {
+      "records": 90,
+      "success": 90,
+      "empty": 0,
+      "errors": 0,
+      "tp": 855,
+      "fp": 14,
+      "fn": 37,
+      "precision": 0.9838895281933256,
+      "recall": 0.9585201793721974,
+      "microF1": 0.9710391822827938,
+      "macroF1": 0.9726940548810032,
+      "macroFields": 16,
+      "fullyCorrect": 71,
+      "fullyCorrectEligible": 90,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.7888888888888889,
+      "extraFilledFields": 0,
+      "conflictingFields": 14
+     },
+     "totalMillis": 10,
+     "meanMillis": 0.1111111111111111,
+     "medianMillis": 0.0,
+     "zeroMillis": 84,
+     "formattingStatuses": {
+      "FORMATTED": 83,
+      "NEEDS_REVIEW": 7
+     }
+    },
+    "grobid": {
+     "summary": {
+      "records": 90,
+      "success": 90,
+      "empty": 0,
+      "errors": 0,
+      "tp": 289,
+      "fp": 322,
+      "fn": 603,
+      "precision": 0.47299509001636664,
+      "recall": 0.3239910313901345,
+      "microF1": 0.38456420492348636,
+      "macroF1": 0.2527977094699961,
+      "macroFields": 16,
+      "fullyCorrect": 0,
+      "fullyCorrectEligible": 90,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.0,
+      "extraFilledFields": 56,
+      "conflictingFields": 266
+     },
+     "totalMillis": 1544,
+     "meanMillis": 17.155555555555555,
+     "medianMillis": 8.0,
+     "zeroMillis": 0,
+     "formattingStatuses": {
+      "FORMATTED": 45,
+      "NEEDS_REVIEW": 45
+     }
+    },
+    "ollama": {
+     "summary": {
+      "records": 90,
+      "success": 90,
+      "empty": 0,
+      "errors": 0,
+      "tp": 794,
+      "fp": 79,
+      "fn": 98,
+      "precision": 0.9095074455899198,
+      "recall": 0.8901345291479821,
+      "microF1": 0.8997167138810198,
+      "macroF1": 0.8853883226932182,
+      "macroFields": 16,
+      "fullyCorrect": 17,
+      "fullyCorrectEligible": 90,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.18888888888888888,
+      "extraFilledFields": 35,
+      "conflictingFields": 44
+     },
+     "totalMillis": 2196897,
+     "meanMillis": 24409.966666666667,
+     "medianMillis": 24872.0,
+     "zeroMillis": 0,
+     "formattingStatuses": {
+      "FORMATTED": 85,
+      "NEEDS_REVIEW": 5
+     }
+    },
+    "anystyle": {
+     "summary": {
+      "records": 90,
+      "success": 90,
+      "empty": 0,
+      "errors": 0,
+      "tp": 369,
+      "fp": 281,
+      "fn": 523,
+      "precision": 0.5676923076923077,
+      "recall": 0.413677130044843,
+      "microF1": 0.4785992217898833,
+      "macroF1": 0.4317952581555523,
+      "macroFields": 16,
+      "fullyCorrect": 0,
+      "fullyCorrectEligible": 90,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.0,
+      "extraFilledFields": 23,
+      "conflictingFields": 258
+     },
+     "totalMillis": 181,
+     "meanMillis": 2.011111111111111,
+     "medianMillis": 1.0,
+     "zeroMillis": 7,
+     "formattingStatuses": {
+      "NEEDS_REVIEW": 67,
+      "FORMATTED": 23
+     }
+    }
+   }
+  },
+  "test": {
+   "recordsPerMethod": 400,
+   "fieldPairs": 27200,
+   "methods": {
+    "rules": {
+     "summary": {
+      "records": 400,
+      "success": 400,
+      "empty": 0,
+      "errors": 0,
+      "tp": 3735,
+      "fp": 143,
+      "fn": 187,
+      "precision": 0.9631253223310985,
+      "recall": 0.952320244773075,
+      "microF1": 0.9576923076923077,
+      "macroF1": 0.9538348794387573,
+      "macroFields": 17,
+      "fullyCorrect": 296,
+      "fullyCorrectEligible": 400,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.74,
+      "extraFilledFields": 8,
+      "conflictingFields": 135
+     },
+     "totalMillis": 1,
+     "meanMillis": 0.0025,
+     "medianMillis": 0.0,
+     "zeroMillis": 399,
+     "formattingStatuses": {
+      "FORMATTED": 389,
+      "NEEDS_REVIEW": 11
+     }
+    },
+    "grobid": {
+     "summary": {
+      "records": 400,
+      "success": 400,
+      "empty": 0,
+      "errors": 0,
+      "tp": 1274,
+      "fp": 1410,
+      "fn": 2648,
+      "precision": 0.47466467958271236,
+      "recall": 0.32483426823049466,
+      "microF1": 0.38570996064184077,
+      "macroF1": 0.2402669881212986,
+      "macroFields": 17,
+      "fullyCorrect": 0,
+      "fullyCorrectEligible": 400,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.0,
+      "extraFilledFields": 290,
+      "conflictingFields": 1120
+     },
+     "totalMillis": 4289,
+     "meanMillis": 10.7225,
+     "medianMillis": 8.0,
+     "zeroMillis": 0,
+     "formattingStatuses": {
+      "NEEDS_REVIEW": 217,
+      "FORMATTED": 183
+     }
+    },
+    "ollama": {
+     "summary": {
+      "records": 400,
+      "success": 400,
+      "empty": 0,
+      "errors": 0,
+      "tp": 3482,
+      "fp": 403,
+      "fn": 440,
+      "precision": 0.8962676962676963,
+      "recall": 0.8878123406425293,
+      "microF1": 0.8920199820673754,
+      "macroF1": 0.8767124750321614,
+      "macroFields": 17,
+      "fullyCorrect": 74,
+      "fullyCorrectEligible": 400,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.185,
+      "extraFilledFields": 208,
+      "conflictingFields": 195
+     },
+     "totalMillis": 10233631,
+     "meanMillis": 25584.0775,
+     "medianMillis": 24281.0,
+     "zeroMillis": 0,
+     "formattingStatuses": {
+      "FORMATTED": 366,
+      "NEEDS_REVIEW": 34
+     }
+    },
+    "anystyle": {
+     "summary": {
+      "records": 400,
+      "success": 400,
+      "empty": 0,
+      "errors": 0,
+      "tp": 1648,
+      "fp": 1315,
+      "fn": 2274,
+      "precision": 0.5561930475869051,
+      "recall": 0.4201937786843447,
+      "microF1": 0.478721859114016,
+      "macroF1": 0.4452266511753533,
+      "macroFields": 17,
+      "fullyCorrect": 2,
+      "fullyCorrectEligible": 400,
+      "fullyCorrectExcludedAmbiguous": 0,
+      "fullyCorrectRate": 0.005,
+      "extraFilledFields": 110,
+      "conflictingFields": 1205
+     },
+     "totalMillis": 637,
+     "meanMillis": 1.5925,
+     "medianMillis": 1.0,
+     "zeroMillis": 25,
+     "formattingStatuses": {
+      "NEEDS_REVIEW": 281,
+      "FORMATTED": 119
+     }
+    }
+   }
+  }
+ },
+ "pendingReview": {
+  "formatting": 1600,
+  "factualFields": 3094,
+  "derivedCategories": 791
+ },
+ "allChecksPassed": true
+}
