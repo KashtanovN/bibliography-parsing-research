@@ -1,6 +1,6 @@
 # Запуск и сохранение эксперимента
 
-Четыре метода: `rules`, `grobid`, `ollama`, `anystyle`. Датасет содержит 490 записей: 90 DEV и 400 TEST. SHA-256 фиксируется файлом [Dataset.sha256](../Dataset.sha256): `b18b1e2d3d7ab35744874a095fd50fad4cbeecfdd497ef6d1a7fcbc020ccc657`.
+Четыре метода: `rules`, `grobid`, `ollama`, `anystyle`. Датасет содержит 490 записей: 90 DEV и 400 TEST. SHA-256 фиксируется файлом [Dataset.sha256](../Dataset.sha256): `0b2f9cb80ef53994e608f61677f7bc1b9d807b7bfcdcd08a97202d8d6f7a168d`.
 
 ## Один автоматический процесс
 

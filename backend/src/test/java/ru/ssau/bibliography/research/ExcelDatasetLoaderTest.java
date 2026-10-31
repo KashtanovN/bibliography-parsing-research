@@ -28,7 +28,24 @@ class ExcelDatasetLoaderTest {
     assertTrue(dataset.references().stream().allMatch(r -> r.ambiguousFields().isEmpty()));
     assertEquals(54, dataset.references().stream().filter(r -> r.sourceType().equals("ВКР")).count());
     assertEquals(40, dataset.references().stream().filter(r -> r.sourceType().equals("Диссертация")).count());
-    assertEquals("b18b1e2d3d7ab35744874a095fd50fad4cbeecfdd497ef6d1a7fcbc020ccc657", dataset.sha256());
+    assertEquals("0b2f9cb80ef53994e608f61677f7bc1b9d807b7bfcdcd08a97202d8d6f7a168d", dataset.sha256());
+    Map<String, String> correctedIssues = Map.of(
+        "R005", "4-2", "R058", "4-2", "R127", "3-4", "R144", "12-3",
+        "R219", "2-3", "R342", "5-6", "R470", "12-1");
+    for (var entry : correctedIssues.entrySet()) {
+      var reference = dataset.references().stream()
+          .filter(r -> r.input().id().equals(entry.getKey())).findFirst().orElseThrow();
+      assertEquals(entry.getValue(), reference.expectedFields().get(ReferenceField.ISSUE), entry.getKey());
+    }
+    try (var book = WorkbookFactory.create(path.toFile(), null, true)) {
+      var sheet = book.getSheet("Датасет");
+      for (var row : sheet) {
+        var issue = row.getCell(10);
+        if (issue != null && issue.getCellType() == CellType.NUMERIC) {
+          assertFalse(DateUtil.isCellDateFormatted(issue), "Дата вместо выпуска: " + issue.getAddress());
+        }
+      }
+    }
     assertArrayEquals(original, Files.readAllBytes(path));
   }
 

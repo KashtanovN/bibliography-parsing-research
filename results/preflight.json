@@ -1,0 +1,75 @@
+{
+  "datasetSha256" : "0b2f9cb80ef53994e608f61677f7bc1b9d807b7bfcdcd08a97202d8d6f7a168d",
+  "records" : 490,
+  "dev" : 90,
+  "test" : 400,
+  "rules" : {
+    "externalEnrichment" : false,
+    "version" : "rules-v1",
+    "unsupported" : "Unrecognized fields remain absent"
+  },
+  "normalization" : "field-evaluation-v2",
+  "grobid" : {
+    "serverVersion" : "{\"version\":\"0.9.1\",\"revision\":\"0.9.1\"}"
+  },
+  "ollama" : {
+    "modelDetails" : {
+      "parent_model" : "",
+      "format" : "gguf",
+      "family" : "qwen3",
+      "families" : [ "qwen3" ],
+      "parameter_size" : "8.2B",
+      "quantization_level" : "Q4_K_M",
+      "context_length" : 40960,
+      "embedding_length" : 4096,
+      "runner" : "ggml"
+    },
+    "ollamaVersion" : "0.40.12",
+    "modelDigest" : "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41"
+  },
+  "promptVersion" : "citation-extraction-v2",
+  "anystyle" : {
+    "runtime" : {
+      "protocol" : "anystyle-jsonl-v1",
+      "version" : "1.6.0",
+      "rubyVersion" : "ruby 4.0.1 (2026-01-13 revision e04267a14b) +PRISM [arm64-darwin24]",
+      "dependencies" : {
+        "anystyle" : "1.6.0",
+        "anystyle-data" : "1.3.0",
+        "bibtex-ruby" : "6.2.0",
+        "builder" : "3.3.0",
+        "did_you_mean" : "2.0.0",
+        "digest" : "3.2.1",
+        "error_highlight" : "0.7.1",
+        "forwardable" : "1.4.0",
+        "json" : "2.18.0",
+        "latex-decode" : "0.4.2",
+        "logger" : "1.7.0",
+        "namae" : "1.2.0",
+        "pp" : "0.6.3",
+        "prettyprint" : "0.2.0",
+        "racc" : "1.8.1",
+        "rexml" : "3.4.4",
+        "syntax_suggest" : "2.0.2",
+        "uri" : "1.1.1",
+        "wapiti" : "2.1.0",
+        "zlib" : "3.2.2"
+      },
+      "assetsSha256" : {
+        "anystyle" : "6ee50dd07d8705afda45da9e94ec8055802834599416a7410a78a59620144bc1",
+        "anystyle-data" : "2ec008b589491984df9db14416e2d5594c6c3929ed096d3fbf02024f6c73c550",
+        "wapiti" : "45ff11f7f76f435ccf3034a6c62c0d80056552bc76c0cf1a20b5e696908f616c",
+        "namae" : "df2cee0f0e91560827f660b733461a7c87e1b6aac4f5db60b523b445a709cdda",
+        "bibtex-ruby" : "d0c4a43c51b41523ccf40ad7ed77f16667f9ca06f9b264773715520fe9f53b5a",
+        "latex-decode" : "f4d1ce6717823d3cfcb044377df7b912d41fbbc5c278b3df24de408f4d1d0fbf"
+      },
+      "modelSha256" : "f297ae000d0122d068c13cde16eb3f877526a821e10c5203d19de504ab6c3ab6",
+      "workerSha256" : "bfac2115d4427b37b503dea651742591567e4f4c069c95d96e68b064744a6eb7",
+      "threads" : 1,
+      "training" : "stock model; no local training",
+      "input" : "one raw citation per request"
+    }
+  },
+  "status" : "READY_FOR_DEV",
+  "inferencePerformed" : false
+}
